@@ -1,0 +1,376 @@
+{
+  "@context": {
+    "@vocab": "https://adscrawl.net/schema#",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "adscrawl": "https://adscrawl.net/schema#",
+    "Error": "adscrawl:Error",
+    "error": {
+      "@id": "adscrawl:error",
+      "@type": "xsd:string"
+    },
+    "code": {
+      "@id": "adscrawl:code",
+      "@type": "xsd:string"
+    },
+    "traceId": {
+      "@id": "adscrawl:traceId",
+      "@type": "xsd:string"
+    },
+    "retryable": {
+      "@id": "adscrawl:retryable",
+      "@type": "xsd:boolean"
+    },
+    "Proxy": "adscrawl:Proxy",
+    "server": {
+      "@id": "adscrawl:server",
+      "@type": "xsd:string"
+    },
+    "protocol": {
+      "@id": "adscrawl:protocol",
+      "@type": "xsd:string"
+    },
+    "host": {
+      "@id": "adscrawl:host",
+      "@type": "xsd:string"
+    },
+    "port": {
+      "@id": "adscrawl:port"
+    },
+    "username": {
+      "@id": "adscrawl:username",
+      "@type": "xsd:string"
+    },
+    "password": {
+      "@id": "adscrawl:password",
+      "@type": "xsd:string"
+    },
+    "Viewport": "adscrawl:Viewport",
+    "width": {
+      "@id": "adscrawl:width",
+      "@type": "xsd:decimal"
+    },
+    "height": {
+      "@id": "adscrawl:height",
+      "@type": "xsd:decimal"
+    },
+    "Geolocation": "adscrawl:Geolocation",
+    "latitude": {
+      "@id": "adscrawl:latitude",
+      "@type": "xsd:decimal"
+    },
+    "longitude": {
+      "@id": "adscrawl:longitude",
+      "@type": "xsd:decimal"
+    },
+    "Fingerprint": "adscrawl:Fingerprint",
+    "webRtc": {
+      "@id": "adscrawl:webRtc",
+      "@type": "xsd:string"
+    },
+    "webGl": {
+      "@id": "adscrawl:webGl",
+      "@type": "xsd:string"
+    },
+    "webGpu": {
+      "@id": "adscrawl:webGpu",
+      "@type": "xsd:string"
+    },
+    "webGlImage": {
+      "@id": "adscrawl:webGlImage",
+      "@type": "xsd:string"
+    },
+    "canvas": {
+      "@id": "adscrawl:canvas",
+      "@type": "xsd:string"
+    },
+    "audioContext": {
+      "@id": "adscrawl:audioContext",
+      "@type": "xsd:string"
+    },
+    "clientRects": {
+      "@id": "adscrawl:clientRects",
+      "@type": "xsd:string"
+    },
+    "speechVoices": {
+      "@id": "adscrawl:speechVoices",
+      "@type": "xsd:string"
+    },
+    "fonts": {
+      "@id": "adscrawl:fonts",
+      "@type": "xsd:string"
+    },
+    "hardware": {
+      "@id": "adscrawl:hardware",
+      "@type": "xsd:string"
+    },
+    "doNotTrack": {
+      "@id": "adscrawl:doNotTrack",
+      "@type": "xsd:string"
+    },
+    "hardwareConcurrency": {
+      "@id": "adscrawl:hardwareConcurrency",
+      "@type": "xsd:integer"
+    },
+    "deviceMemory": {
+      "@id": "adscrawl:deviceMemory",
+      "@type": "xsd:integer"
+    },
+    "Cookie": "adscrawl:Cookie",
+    "name": {
+      "@id": "adscrawl:name",
+      "@type": "xsd:string"
+    },
+    "value": {
+      "@id": "adscrawl:value",
+      "@type": "xsd:string"
+    },
+    "domain": {
+      "@id": "adscrawl:domain",
+      "@type": "xsd:string"
+    },
+    "path": {
+      "@id": "adscrawl:path",
+      "@type": "xsd:string"
+    },
+    "secure": {
+      "@id": "adscrawl:secure",
+      "@type": "xsd:boolean"
+    },
+    "httpOnly": {
+      "@id": "adscrawl:httpOnly",
+      "@type": "xsd:boolean"
+    },
+    "hostOnly": {
+      "@id": "adscrawl:hostOnly",
+      "@type": "xsd:boolean"
+    },
+    "sameSite": {
+      "@id": "adscrawl:sameSite",
+      "@type": "xsd:string"
+    },
+    "session": {
+      "@id": "adscrawl:session",
+      "@type": "xsd:boolean"
+    },
+    "expires": {
+      "@id": "adscrawl:expires",
+      "@type": "xsd:decimal"
+    },
+    "expirationDate": {
+      "@id": "adscrawl:expirationDate",
+      "@type": "xsd:decimal"
+    },
+    "expiry": {
+      "@id": "adscrawl:expiry",
+      "@type": "xsd:decimal"
+    },
+    "BrowserSettings": "adscrawl:BrowserSettings",
+    "viewport": {
+      "@id": "adscrawl:viewport",
+      "@type": "@id"
+    },
+    "locale": {
+      "@id": "adscrawl:locale",
+      "@type": "xsd:string"
+    },
+    "timezoneId": {
+      "@id": "adscrawl:timezoneId",
+      "@type": "xsd:string"
+    },
+    "geolocation": {
+      "@id": "adscrawl:geolocation",
+      "@type": "@id"
+    },
+    "proxy": {
+      "@id": "adscrawl:proxy",
+      "@type": "@id"
+    },
+    "countryCode": {
+      "@id": "adscrawl:countryCode",
+      "@type": "xsd:string"
+    },
+    "userAgent": {
+      "@id": "adscrawl:userAgent",
+      "@type": "xsd:string"
+    },
+    "userAgentMode": {
+      "@id": "adscrawl:userAgentMode",
+      "@type": "xsd:string"
+    },
+    "userAgentOs": {
+      "@id": "adscrawl:userAgentOs",
+      "@type": "xsd:string"
+    },
+    "fingerprint": {
+      "@id": "adscrawl:fingerprint",
+      "@type": "@id"
+    },
+    "cookies": {
+      "@id": "adscrawl:cookies",
+      "@container": "@list"
+    },
+    "WaitFor": "adscrawl:WaitFor",
+    "selector": {
+      "@id": "adscrawl:selector",
+      "@type": "xsd:string"
+    },
+    "text": {
+      "@id": "adscrawl:text",
+      "@type": "xsd:string"
+    },
+    "timeoutMs": {
+      "@id": "adscrawl:timeoutMs",
+      "@type": "xsd:decimal"
+    },
+    "ExtractionField": "adscrawl:ExtractionField",
+    "source": {
+      "@id": "adscrawl:source",
+      "@type": "xsd:string"
+    },
+    "attribute": {
+      "@id": "adscrawl:attribute",
+      "@type": "xsd:string"
+    },
+    "urlIncludes": {
+      "@id": "adscrawl:urlIncludes",
+      "@type": "xsd:string"
+    },
+    "multiple": {
+      "@id": "adscrawl:multiple",
+      "@type": "xsd:boolean"
+    },
+    "parse": {
+      "@id": "adscrawl:parse",
+      "@type": "xsd:string"
+    },
+    "regex": {
+      "@id": "adscrawl:regex",
+      "@type": "xsd:string"
+    },
+    "required": {
+      "@id": "adscrawl:required",
+      "@type": "xsd:boolean"
+    },
+    "ExtractionTemplate": "adscrawl:ExtractionTemplate",
+    "id": {
+      "@id": "adscrawl:id",
+      "@type": "xsd:string"
+    },
+    "description": {
+      "@id": "adscrawl:description",
+      "@type": "xsd:string"
+    },
+    "urlPattern": {
+      "@id": "adscrawl:urlPattern",
+      "@type": "xsd:string"
+    },
+    "exampleUrl": {
+      "@id": "adscrawl:exampleUrl",
+      "@type": "xsd:string"
+    },
+    "version": {
+      "@id": "adscrawl:version",
+      "@type": "xsd:integer"
+    },
+    "updatedAt": {
+      "@id": "adscrawl:updatedAt",
+      "@type": "xsd:dateTime"
+    },
+    "outputFields": {
+      "@id": "adscrawl:outputFields",
+      "@container": "@list"
+    },
+    "waitUntil": {
+      "@id": "adscrawl:waitUntil",
+      "@type": "xsd:string"
+    },
+    "input": {
+      "@id": "adscrawl:input"
+    },
+    "catalog": {
+      "@id": "adscrawl:catalog"
+    },
+    "CloudLaunchRequest": "adscrawl:CloudLaunchRequest",
+    "apiKeyId": {
+      "@id": "adscrawl:apiKeyId",
+      "@type": "xsd:string"
+    },
+    "tabs": {
+      "@id": "adscrawl:tabs",
+      "@container": "@list"
+    },
+    "CloudStartRequest": "adscrawl:CloudStartRequest",
+    "CloudRuntime": "adscrawl:CloudRuntime",
+    "runtimeKind": {
+      "@id": "adscrawl:runtimeKind",
+      "@type": "xsd:string"
+    },
+    "status": {
+      "@id": "adscrawl:status",
+      "@type": "xsd:string"
+    },
+    "sessionId": {
+      "@id": "adscrawl:sessionId",
+      "@type": "xsd:string"
+    },
+    "expiresAt": {
+      "@id": "adscrawl:expiresAt",
+      "@type": "xsd:dateTime"
+    },
+    "connectUrl": {
+      "@id": "adscrawl:connectUrl",
+      "@type": "@id"
+    },
+    "cdpBaseUrl": {
+      "@id": "adscrawl:cdpBaseUrl",
+      "@type": "@id"
+    },
+    "CloudBrowser": "adscrawl:CloudBrowser",
+    "deleteOnStop": {
+      "@id": "adscrawl:deleteOnStop",
+      "@type": "xsd:boolean"
+    },
+    "deleted": {
+      "@id": "adscrawl:deleted",
+      "@type": "xsd:boolean"
+    },
+    "remark": {
+      "@id": "adscrawl:remark",
+      "@type": "xsd:string"
+    },
+    "browserSettings": {
+      "@id": "adscrawl:browserSettings"
+    },
+    "proxyDisplayIp": {
+      "@id": "adscrawl:proxyDisplayIp",
+      "@type": "xsd:string"
+    },
+    "proxyDisplayRegion": {
+      "@id": "adscrawl:proxyDisplayRegion",
+      "@type": "xsd:string"
+    },
+    "lastOpenedAt": {
+      "@id": "adscrawl:lastOpenedAt",
+      "@type": "xsd:dateTime"
+    },
+    "runtime": {
+      "@id": "adscrawl:runtime",
+      "@type": "@id"
+    },
+    "CloudLifecycleResult": "adscrawl:CloudLifecycleResult",
+    "ok": {
+      "@id": "adscrawl:ok",
+      "@type": "xsd:boolean"
+    },
+    "CdpSession": "adscrawl:CdpSession"
+  },
+  "@type": "schema:Dataset",
+  "schema:name": "AdsCrawl API JSON-LD context",
+  "schema:description": "A JSON-LD @context for the objects AdsCrawl's own API contract declares: one class per component schema, one property per declared field, typed from the contract. Derived by script (derive-json-ld.py, 2026-10-02) from openapi/adscrawl-openapi.yaml.",
+  "dcterms:created": "2026-10-02",
+  "dcterms:source": [
+    "openapi/adscrawl-openapi.yaml"
+  ]
+}

@@ -1,0 +1,21 @@
+generated: '2026-10-02'
+method: derived
+generator: derive-problem-types.py
+source:
+- openapi/adscrawl-openapi.yaml
+format: custom
+envelope:
+  media_type: application/json
+  schema: Error
+coverage:
+  operations: 15
+  statuses_declared: 1
+problems:
+- status: default
+  title: null
+  description: Error response. Typical statuses are 400 invalid input, 401 invalid authentication, 402 payment/credits
+    required, 403 ownership mismatch, 40
+  operations: 15
+  media_types:
+  - application/json
+  schema: Error

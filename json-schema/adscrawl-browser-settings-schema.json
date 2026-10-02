@@ -1,0 +1,307 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adscrawl/main/json-schema/adscrawl-browser-settings-schema.json",
+  "title": "BrowserSettings",
+  "description": "Reusable browser options. proxy and countryCode cannot be supplied together. Browser tasks and temporary CDP sessions use a managed proxy when selection is omitted. Cloud browser API-key starts have stricter top-level custom proxy requirements described on their operations.",
+  "x-generated": "2026-10-02",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adscrawl-openapi.yaml#/components/schemas/BrowserSettings",
+  "type": "object",
+  "properties": {
+    "viewport": {
+      "$ref": "#/$defs/Viewport"
+    },
+    "locale": {
+      "type": "string"
+    },
+    "timezoneId": {
+      "type": "string"
+    },
+    "geolocation": {
+      "$ref": "#/$defs/Geolocation"
+    },
+    "proxy": {
+      "$ref": "#/$defs/Proxy"
+    },
+    "countryCode": {
+      "type": "string",
+      "description": "GLOBAL or a two-letter region code; cannot be combined with proxy."
+    },
+    "userAgent": {
+      "type": "string"
+    },
+    "userAgentMode": {
+      "type": "string",
+      "enum": [
+        "custom",
+        "random"
+      ]
+    },
+    "userAgentOs": {
+      "type": "string",
+      "enum": [
+        "windows",
+        "macos"
+      ]
+    },
+    "fingerprint": {
+      "$ref": "#/$defs/Fingerprint"
+    },
+    "cookies": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Cookie"
+      }
+    }
+  },
+  "$defs": {
+    "Cookie": {
+      "type": "object",
+      "required": [
+        "name",
+        "domain"
+      ],
+      "description": "Preset browser cookie. Use native JSON booleans. Legacy browser-task inputs also accept compatibility forms for some flags. Launch defaults an omitted value to an empty string. Expiry aliases are Unix seconds.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "value": {
+          "type": "string",
+          "default": ""
+        },
+        "domain": {
+          "type": "string",
+          "minLength": 1
+        },
+        "path": {
+          "type": "string",
+          "default": "/"
+        },
+        "secure": {
+          "type": "boolean"
+        },
+        "httpOnly": {
+          "type": "boolean"
+        },
+        "hostOnly": {
+          "type": "boolean"
+        },
+        "sameSite": {
+          "type": "string",
+          "enum": [
+            "Strict",
+            "Lax",
+            "None"
+          ]
+        },
+        "session": {
+          "type": "boolean"
+        },
+        "expires": {
+          "type": "number"
+        },
+        "expirationDate": {
+          "type": "number"
+        },
+        "expiry": {
+          "type": "number"
+        }
+      }
+    },
+    "Fingerprint": {
+      "type": "object",
+      "description": "Browser fingerprint modes. Defaults and supported combinations depend on the workflow; the server maintains a coherent identity and seed.",
+      "properties": {
+        "webRtc": {
+          "type": "string",
+          "enum": [
+            "forward",
+            "real",
+            "disabled"
+          ]
+        },
+        "webGl": {
+          "type": "string",
+          "enum": [
+            "random",
+            "real"
+          ]
+        },
+        "webGpu": {
+          "type": "string",
+          "enum": [
+            "random",
+            "real",
+            "disabled"
+          ]
+        },
+        "webGlImage": {
+          "type": "string",
+          "enum": [
+            "random",
+            "real"
+          ]
+        },
+        "canvas": {
+          "type": "string",
+          "enum": [
+            "random",
+            "real"
+          ]
+        },
+        "audioContext": {
+          "type": "string",
+          "enum": [
+            "random",
+            "real"
+          ]
+        },
+        "clientRects": {
+          "type": "string",
+          "enum": [
+            "random",
+            "real"
+          ]
+        },
+        "speechVoices": {
+          "type": "string",
+          "enum": [
+            "random",
+            "real"
+          ]
+        },
+        "fonts": {
+          "type": "string",
+          "enum": [
+            "random",
+            "real"
+          ]
+        },
+        "hardware": {
+          "type": "string",
+          "enum": [
+            "random",
+            "real"
+          ]
+        },
+        "doNotTrack": {
+          "type": "string",
+          "enum": [
+            "random",
+            "enabled",
+            "disabled"
+          ]
+        },
+        "hardwareConcurrency": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 64
+        },
+        "deviceMemory": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 64
+        }
+      }
+    },
+    "Geolocation": {
+      "type": "object",
+      "required": [
+        "latitude",
+        "longitude"
+      ],
+      "properties": {
+        "latitude": {
+          "type": "number"
+        },
+        "longitude": {
+          "type": "number"
+        }
+      }
+    },
+    "Proxy": {
+      "type": "object",
+      "description": "Use server OR protocol/host/port. server must be an http:// or socks5:// URL with an explicit port, without embedded credentials, query, fragment, or non-root path. Port range is 1-65535. Provide both non-empty username and password, or omit both. Custom proxy and countryCode are mutually exclusive. Proxy failures never fall back to a direct connection.",
+      "properties": {
+        "server": {
+          "type": "string"
+        },
+        "protocol": {
+          "type": "string",
+          "enum": [
+            "http",
+            "socks5"
+          ]
+        },
+        "host": {
+          "type": "string"
+        },
+        "port": {
+          "oneOf": [
+            {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 65535
+            },
+            {
+              "type": "string",
+              "pattern": "^[0-9]+$"
+            }
+          ]
+        },
+        "username": {
+          "type": "string",
+          "minLength": 1,
+          "writeOnly": true
+        },
+        "password": {
+          "type": "string",
+          "minLength": 1,
+          "writeOnly": true
+        }
+      },
+      "oneOf": [
+        {
+          "required": [
+            "server"
+          ],
+          "not": {
+            "required": [
+              "host"
+            ]
+          }
+        },
+        {
+          "required": [
+            "protocol",
+            "host",
+            "port"
+          ],
+          "not": {
+            "required": [
+              "server"
+            ]
+          }
+        }
+      ]
+    },
+    "Viewport": {
+      "type": "object",
+      "required": [
+        "width",
+        "height"
+      ],
+      "properties": {
+        "width": {
+          "type": "number"
+        },
+        "height": {
+          "type": "number"
+        }
+      }
+    }
+  }
+}

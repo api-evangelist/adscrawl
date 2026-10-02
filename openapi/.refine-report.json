@@ -1,0 +1,21 @@
+{
+  "provider": "adscrawl",
+  "sources": [
+    "adscrawl-openapi.yaml"
+  ],
+  "outputs": [
+    "adscrawl-browser-tasks-api-openapi.yml",
+    "adscrawl-cloud-browsers-api-openapi.yml",
+    "adscrawl-remote-cdp-api-openapi.yml"
+  ],
+  "archived": [
+    "archived openapi/adscrawl-openapi.yaml"
+  ],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "adscrawl-openapi.yaml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "apis.yml register: written (+3 apis, 3 total)"
+  ],
+  "skipped": []
+}

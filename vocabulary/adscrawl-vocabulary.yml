@@ -1,0 +1,112 @@
+generated: '2026-10-02'
+method: derived
+generator: derive-vocabulary.py
+source: openapi/adscrawl-openapi.yaml
+vocabulary:
+  name: AdsCrawl Domain Vocabulary
+  description: 'Terms declared by AdsCrawl''s own API contract: its resource groups, objects and enumerations, with the contract''s definitions.
+    Derived, not authored.'
+  version: '2026-10-02'
+  terms:
+  - term: Browser tasks
+    definition: Synchronous rendered content, screenshots, and structured extraction.
+    tags:
+    - Resource Group
+    source: openapi/adscrawl-openapi.yaml
+  - term: Cloud browsers
+    definition: Persistent profiles and browser lifecycle. Starting requires a paid plan.
+    tags:
+    - Resource Group
+    source: openapi/adscrawl-openapi.yaml
+  - term: Remote CDP
+    definition: Temporary browser sessions and scoped connection tokens.
+    tags:
+    - Resource Group
+    source: openapi/adscrawl-openapi.yaml
+  - term: Error
+    definition: 'Object declared by the contract with fields: error, code, traceId, retryable.'
+    tags:
+    - Object
+    source: openapi/adscrawl-openapi.yaml#/components/schemas/Error
+  - term: Proxy
+    definition: Use server OR protocol/host/port. server must be an http:// or socks5:// URL with an explicit port, without embedded credentials,
+      query, fragment, or non-root path. Port range is 1-65535. Provide both non-empty username and password, or omit both. Custom proxy and countryCode
+      are mutually exclusive. Proxy failures never fall back to a direct connection.
+    tags:
+    - Object
+    source: openapi/adscrawl-openapi.yaml#/components/schemas/Proxy
+  - term: Viewport
+    definition: 'Object declared by the contract with fields: width, height.'
+    tags:
+    - Object
+    source: openapi/adscrawl-openapi.yaml#/components/schemas/Viewport
+  - term: Geolocation
+    definition: 'Object declared by the contract with fields: latitude, longitude.'
+    tags:
+    - Object
+    source: openapi/adscrawl-openapi.yaml#/components/schemas/Geolocation
+  - term: Fingerprint
+    definition: Browser fingerprint modes. Defaults and supported combinations depend on the workflow; the server maintains a coherent identity
+      and seed.
+    tags:
+    - Object
+    source: openapi/adscrawl-openapi.yaml#/components/schemas/Fingerprint
+  - term: Cookie
+    definition: Preset browser cookie. Use native JSON booleans. Legacy browser-task inputs also accept compatibility forms for some flags. Launch
+      defaults an omitted value to an empty string. Expiry aliases are Unix seconds.
+    tags:
+    - Object
+    source: openapi/adscrawl-openapi.yaml#/components/schemas/Cookie
+  - term: BrowserSettings
+    definition: Reusable browser options. proxy and countryCode cannot be supplied together. Browser tasks and temporary CDP sessions use a managed
+      proxy when selection is omitted. Cloud browser API-key starts have stricter top-level custom proxy requirements described on their operations.
+    tags:
+    - Object
+    source: openapi/adscrawl-openapi.yaml#/components/schemas/BrowserSettings
+  - term: WaitFor
+    definition: 'Object declared by the contract with fields: selector, text, timeoutMs.'
+    tags:
+    - Object
+    source: openapi/adscrawl-openapi.yaml#/components/schemas/WaitFor
+  - term: ExtractionField
+    definition: 'Object declared by the contract with fields: source, selector, value, attribute, urlIncludes, path, multiple, parse, regex, required.'
+    tags:
+    - Object
+    source: openapi/adscrawl-openapi.yaml#/components/schemas/ExtractionField
+  - term: ExtractionTemplate
+    definition: 'Object declared by the contract with fields: id, name, description, urlPattern, exampleUrl, version, updatedAt, outputFields,
+      waitUntil, input, catalog.'
+    tags:
+    - Object
+    source: openapi/adscrawl-openapi.yaml#/components/schemas/ExtractionTemplate
+  - term: CloudLaunchRequest
+    definition: 'Object declared by the contract with fields: proxy, apiKeyId, tabs, cookies, fingerprint.'
+    tags:
+    - Object
+    source: openapi/adscrawl-openapi.yaml#/components/schemas/CloudLaunchRequest
+  - term: CloudStartRequest
+    definition: API-key callers must provide proxy; session callers must provide apiKeyId. These requirements depend on authentication.
+    tags:
+    - Object
+    source: openapi/adscrawl-openapi.yaml#/components/schemas/CloudStartRequest
+  - term: CloudRuntime
+    definition: 'Object declared by the contract with fields: runtimeKind, status, sessionId, expiresAt, connectUrl, cdpBaseUrl.'
+    tags:
+    - Object
+    source: openapi/adscrawl-openapi.yaml#/components/schemas/CloudRuntime
+  - term: CloudBrowser
+    definition: 'Object declared by the contract with fields: id, source, deleteOnStop, deleted, remark, browserSettings, proxyDisplayIp, proxyDisplayRegion,
+      lastOpenedAt, updatedAt, runtime.'
+    tags:
+    - Object
+    source: openapi/adscrawl-openapi.yaml#/components/schemas/CloudBrowser
+  - term: CloudLifecycleResult
+    definition: 'Object declared by the contract with fields: ok, id, source, deleteOnStop, deleted, runtime, traceId.'
+    tags:
+    - Object
+    source: openapi/adscrawl-openapi.yaml#/components/schemas/CloudLifecycleResult
+  - term: CdpSession
+    definition: 'Object declared by the contract with fields: sessionId, expiresAt, cdpBaseUrl.'
+    tags:
+    - Object
+    source: openapi/adscrawl-openapi.yaml#/components/schemas/CdpSession

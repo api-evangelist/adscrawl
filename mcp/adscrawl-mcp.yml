@@ -1,0 +1,7 @@
+generated: '2026-10-02'
+method: none
+deployment:
+  mode: none
+  package: ""
+  auth: none
+  verified: derived

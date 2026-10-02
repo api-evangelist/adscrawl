@@ -1,0 +1,123 @@
+generated: '2026-10-02'
+method: derived
+source: the pre-flight dossier, apis.yml pointers, spec servers, well-known, vendors -- nothing fetched here
+generator: derive-hosts.py
+summary:
+  hosts: 8
+  own: 5
+  other_domain: 2
+  platform: 1
+  roles:
+  - api
+  - docs
+  - marketing
+  - other
+  - portal
+  - source
+  - website
+hosts:
+- host: api.adscrawl.net
+  found_by:
+  - apis[]
+  - probed
+  - site-links
+  - contract-discovery
+  - well-known
+  types: []
+  serves:
+  - api
+  registrable_domain: adscrawl.net
+  role: api
+  relation: own
+- host: api.adscrawl.net`
+  found_by:
+  - pointer
+  types:
+  - DeveloperPortal
+  serves: []
+  registrable_domain: adscrawl.net`
+  role: portal
+  relation: other-domain
+- host: app.adscrawl.net
+  found_by:
+  - probed
+  - site-links
+  - docs-index
+  - contract-discovery
+  - well-known
+  types: []
+  serves:
+  - docs
+  registrable_domain: adscrawl.net
+  role: other
+  relation: own
+- host: blog.adscrawl.net
+  found_by:
+  - pointer
+  - probed
+  - site-links
+  - contract-discovery
+  - well-known
+  types:
+  - Blog
+  serves: []
+  registrable_domain: adscrawl.net
+  role: marketing
+  relation: own
+- host: docs.adscrawl.net
+  found_by:
+  - pointer
+  - apis[]
+  - probed
+  - site-links
+  - docs-index
+  - contract-discovery
+  - well-known
+  - vendor-detect
+  types:
+  - Pricing
+  - APIReference
+  - GettingStarted
+  - Documentation
+  serves:
+  - docs
+  - cdn
+  - documentation
+  - hosting
+  vendor: cloudflare
+  registrable_domain: adscrawl.net
+  role: docs
+  relation: own
+- host: github.com
+  found_by:
+  - pointer
+  types:
+  - GitHubOrganization
+  serves: []
+  registrable_domain: github.com
+  role: source
+  relation: platform
+- host: mintlify.com
+  found_by:
+  - docs-index
+  types: []
+  serves:
+  - docs
+  registrable_domain: mintlify.com
+  role: other
+  relation: other-domain
+- host: www.adscrawl.net
+  found_by:
+  - pointer
+  - probed
+  - contract-discovery
+  - well-known
+  types:
+  - TermsOfService
+  - PrivacyPolicy
+  - Login
+  - Website
+  serves: []
+  registrable_domain: adscrawl.net
+  role: website
+  relation: own

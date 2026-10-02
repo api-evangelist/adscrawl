@@ -1,0 +1,39 @@
+generated: '2026-10-02'
+method: probed
+generator: harvest-packages.py
+source: registry metadata endpoints (registry.npmjs.org, pypi.org, rubygems.org, api.nuget.org, packagist.org, crates.io)
+ownership_rule: 'official: true only when the registry metadata (homepage, repository, author, URLs) names the provider''s domain (adscrawl.net,
+  security/adscrawl-domain-security.yml) or its accepted GitHub org.'
+packages:
+- name: adscrawl
+  registry: npm
+  url: https://www.npmjs.com/package/adscrawl
+  language: JavaScript
+  official: true
+  version: 0.1.0
+  published: '2026-09-18'
+  evidence: metadata names adscrawl.net
+- name: adscrawl
+  registry: pypi
+  url: https://pypi.org/project/adscrawl/
+  language: Python
+  official: true
+  version: 0.1.0
+  published: '2026-09-20'
+  evidence: metadata names adscrawl.net
+- name: adscrawl
+  registry: rubygems
+  url: https://rubygems.org/gems/adscrawl
+  language: Ruby
+  official: true
+  version: 0.1.0
+  published: '2026-09-28'
+  evidence: metadata names adscrawl.net
+- name: adscrawl/adscrawl
+  registry: packagist
+  url: https://packagist.org/packages/adscrawl/adscrawl
+  language: PHP
+  official: true
+  version: v0.1.0
+  published: '2026-09-28'
+  evidence: metadata names adscrawl.net

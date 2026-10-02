@@ -1,0 +1,21 @@
+generated: '2026-10-02'
+method: searched
+generator: extract-docs-artifacts.py (local)
+source: https://docs.adscrawl.net/quickstart.md
+sources:
+- https://docs.adscrawl.net/quickstart.md
+- https://docs.adscrawl.net/authentication.md
+- https://docs.adscrawl.net/api-reference/cdp-live-token.md
+idempotency:
+  coverage: none
+  evidence: No idempotency key mechanism is documented for any write operations.
+pagination:
+  style: none
+  evidence: The documentation does not describe pagination parameters or response fields.
+versioning: none
+error_envelope: none
+authentication: full
+request_tracing: none
+rate_limit_signaling: none
+field_expansion: none
+docs: https://docs.adscrawl.net/quickstart.md

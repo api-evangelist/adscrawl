@@ -1,0 +1,934 @@
+# x-archived-from: adscrawl-openapi.yaml
+# x-archived-on: 2026-10-02
+openapi: 3.0.3
+info:
+  title: AdsCrawl API
+  version: 1.0.0
+  description: >-
+    Real-browser web scraping and browser automation. Render HTML or Markdown,
+    extract structured data, capture PNG screenshots, manage persistent cloud
+    browser profiles, and create remote CDP sessions for Playwright or Puppeteer.
+    This definition covers the HTTP APIs published in the AdsCrawl documentation.
+    WebSocket message protocols and dashboard-only endpoints are documented
+    separately. Browser-task JSON request bodies are limited to 1 MiB.
+    Use a full API key in x-api-key; a login session JWT is not an API key.
+  contact:
+    name: AdsCrawl Support
+    url: https://www.adscrawl.net/docs/
+    email: support@adscrawl.net
+  x-providerName: adscrawl.net
+  x-categories:
+    - developer_tools
+  x-origin:
+    - url: https://www.adscrawl.net/openapi.yaml
+      format: openapi
+      version: '3.0'
+servers:
+  - url: https://api.adscrawl.net
+    description: Production
+externalDocs:
+  description: AdsCrawl documentation and WebSocket examples
+  url: https://www.adscrawl.net/docs/
+security:
+  - ApiKey: []
+tags:
+  - name: Browser tasks
+    description: Synchronous rendered content, screenshots, and structured extraction.
+  - name: Cloud browsers
+    description: Persistent profiles and browser lifecycle. Starting requires a paid plan.
+  - name: Remote CDP
+    description: Temporary browser sessions and scoped connection tokens.
+paths:
+  /html:
+    post:
+      operationId: renderHtml
+      tags: [Browser tasks]
+      summary: Render HTML, Markdown, or article JSON
+      description: >-
+        Render a public HTTP(S) URL using a real browser. contentMode selects
+        the response media type. Validation precedes billing and queueing.
+        A missing readable article can return READABILITY_CONTENT_NOT_FOUND.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HtmlRequest'
+            example:
+              url: https://example.com/article
+              contentMode: markdown
+              waitUntil: domcontentloaded
+      responses:
+        '200':
+          description: Rendered page or extracted article, not a task envelope.
+          content:
+            text/html:
+              schema: {type: string}
+            text/markdown:
+              schema: {type: string}
+            application/json:
+              schema:
+                type: object
+                description: Structured article output; fields depend on the extracted page.
+                additionalProperties: true
+        default:
+          $ref: '#/components/responses/TaskError'
+  /screenshot:
+    post:
+      operationId: captureScreenshot
+      tags: [Browser tasks]
+      summary: Capture a page or element as PNG
+      description: >-
+        Returns PNG bytes synchronously. selector capture takes precedence over
+        fullPage. An unmatched selector returns 422.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScreenshotRequest'
+            example:
+              url: https://example.com
+              fullPage: true
+      responses:
+        '200':
+          description: PNG screenshot bytes.
+          content:
+            image/png:
+              schema: {type: string, format: binary}
+        default:
+          $ref: '#/components/responses/TaskError'
+  /spa-extract:
+    post:
+      operationId: extractSpa
+      tags: [Browser tasks]
+      summary: Inspect or extract structured data from a page
+      description: >-
+        Use DOM/network fields or a published site template. Custom extraction
+        requires a public page URL. For google-trends-explore, keyword is
+        recommended; when keyword is omitted, legacy url input is supported.
+        Explicit null or an empty keyword is invalid. fields takes precedence
+        over the legacy schema selector mapping. The schema field is not
+        response JSON Schema validation.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SpaRequest'
+            example:
+              url: https://example.com
+              mode: extract
+              fields:
+                title:
+                  source: dom
+                  selector: h1
+                  value: text
+      responses:
+        '200':
+          description: >-
+            Page inspection or extracted data. The shape depends on mode,
+            requested fields, and template. Google Trends also returns source,
+            cached, stale, collectedAt, and attempts metadata.
+          content:
+            application/json:
+              schema: {type: object, additionalProperties: true}
+        default:
+          $ref: '#/components/responses/TaskError'
+  /spa-extract/templates:
+    get:
+      operationId: listExtractionTemplates
+      tags: [Browser tasks]
+      summary: List available extraction templates
+      responses:
+        '200':
+          description: Templates with their inputs, output fields, and catalog metadata.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [templates]
+                properties:
+                  templates:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ExtractionTemplate'
+        default:
+          $ref: '#/components/responses/ApiError'
+  /cloud-browsers:
+    get:
+      operationId: listCloudBrowsers
+      tags: [Cloud browsers]
+      summary: List saved profiles and account-wide quotas
+      security:
+        - ApiKey: []
+        - SessionBearer: []
+        - SessionCookie: []
+      parameters:
+        - name: page
+          in: query
+          description: Defaults to 1; capped at 10000. Invalid or non-positive values use the default.
+          schema: {type: integer, default: 1}
+        - name: pageSize
+          in: query
+          description: Defaults to and is capped at 10. Invalid or non-positive values use the default.
+          schema: {type: integer, default: 10}
+      responses:
+        '200':
+          description: >-
+            Profiles owned by the authenticated user. limit is saved-profile
+            capacity; runningCount includes starting/running/stopping sessions
+            across all pages and API keys. Temporary CDP sessions are separate.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: {type: boolean}
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CloudBrowser'
+                  pagination:
+                    type: object
+                    properties:
+                      page: {type: integer}
+                      pageSize: {type: integer}
+                      total: {type: integer}
+                      totalPages: {type: integer}
+                  limit: {type: integer}
+                  runningLimit: {type: integer}
+                  runningCount: {type: integer}
+        default:
+          $ref: '#/components/responses/ApiError'
+    post:
+      operationId: createCloudBrowser
+      tags: [Cloud browsers]
+      summary: Save a cloud browser profile without starting it
+      description: >-
+        An empty object is valid. Creating a profile consumes saved-profile
+        allowance, not running allowance. A saved proxy does not replace the
+        required top-level proxy on every API-key-authenticated start.
+      security:
+        - ApiKey: []
+        - SessionBearer: []
+        - SessionCookie: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                remark: {type: string, maxLength: 255}
+                browserSettings:
+                  $ref: '#/components/schemas/BrowserSettings'
+            example: {remark: API profile}
+      responses:
+        '201':
+          description: Profile saved; its runtime is stopped.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [ok, id]
+                properties:
+                  ok: {type: boolean}
+                  id: {type: string, format: uuid}
+        default:
+          $ref: '#/components/responses/ApiError'
+  /cloud-browsers/launch:
+    post:
+      operationId: launchCloudBrowser
+      tags: [Cloud browsers]
+      summary: Create a profile and start its browser
+      description: >-
+        Requires an explicit custom proxy for every authentication method.
+        Returns 201 only after running is confirmed. Each call creates a new
+        profile without an idempotency key: do not automatically repeat launch.
+        On failure after creation, inspect the returned id and retry stop with
+        a bound. Stop retains the profile and snapshots; closing a viewer does
+        not stop the browser or billing. Startup can wait 60 seconds and cleanup
+        confirmation can take up to 120 additional seconds.
+      security:
+        - ApiKey: []
+        - SessionBearer: []
+        - SessionCookie: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CloudLaunchRequest'
+            example:
+              proxy: {server: 'http://proxy.example.com:8080'}
+              tabs: [https://example.com]
+      responses:
+        '201':
+          description: Profile created with a confirmed running browser.
+          headers:
+            Location:
+              description: Profile detail API URL, not the interactive viewer.
+              schema: {type: string}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CloudLifecycleResult'
+        default:
+          $ref: '#/components/responses/CloudStartError'
+  /cloud-browsers/{id}:
+    parameters:
+      - $ref: '#/components/parameters/CloudBrowserId'
+    get:
+      operationId: getCloudBrowser
+      tags: [Cloud browsers]
+      summary: Read a saved profile and actual runtime state
+      description: >-
+        Returns the profile directly without a data wrapper. Use runtime.status
+        as returned. A missing node or connection URL does not confirm shutdown.
+        Proxy credentials are removed from responses; saved cookies remain
+        readable by their owner. Viewer access requires the owner's login session.
+      security:
+        - ApiKey: []
+        - SessionBearer: []
+        - SessionCookie: []
+      responses:
+        '200':
+          description: Saved profile and runtime status.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CloudBrowser'
+        default:
+          $ref: '#/components/responses/ApiError'
+  /cloud-browsers/{id}/start:
+    parameters:
+      - $ref: '#/components/parameters/CloudBrowserId'
+    post:
+      operationId: startCloudBrowser
+      tags: [Cloud browsers]
+      summary: Start a saved profile
+      description: >-
+        With API-key authentication, send a valid top-level proxy on every
+        start; saved settings, countryCode, or source=web cannot replace it.
+        Session authentication requires apiKeyId and may use an explicit
+        managed region or saved proxy selection. Start overrides apply to this
+        run only. Both authentication paths require a proxy; failures never
+        fall back to a direct connection. Starting/running/stopping reserve
+        running allowance. Starting an active profile returns 409.
+      security:
+        - ApiKey: []
+        - SessionBearer: []
+        - SessionCookie: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CloudStartRequest'
+            example:
+              proxy: {server: 'http://proxy.example.com:8080'}
+      responses:
+        '200':
+          description: Runtime confirmed running.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CloudLifecycleResult'
+        default:
+          $ref: '#/components/responses/CloudStartError'
+  /cloud-browsers/{id}/stop:
+    parameters:
+      - $ref: '#/components/parameters/CloudBrowserId'
+    post:
+      operationId: stopCloudBrowser
+      tags: [Cloud browsers]
+      summary: Stop a browser while retaining its profile
+      description: >-
+        A 202 response means shutdown is pending, not complete. Poll profile
+        detail until runtime.status is stopped. Stopping still occupies a
+        running slot; confirmed stopped releases it. Saved-profile count is
+        unchanged. Stopping an already stopped profile returns 200.
+      security:
+        - ApiKey: []
+        - SessionBearer: []
+        - SessionCookie: []
+      responses:
+        '200':
+          description: Runtime stopped.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CloudLifecycleResult'
+        '202':
+          description: Shutdown pending; query detail to confirm stopped.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CloudLifecycleResult'
+        default:
+          $ref: '#/components/responses/ApiError'
+  /cdp/sessions:
+    post:
+      operationId: createCdpSession
+      tags: [Remote CDP]
+      summary: Create a temporary browser session
+      description: >-
+        Returns cdpBaseUrl with a scoped data token. Pass that URL directly to
+        Playwright connectOverCDP, or fetch discovery to obtain the protocol
+        WebSocket URL. Do not replace the embedded data token with an API key.
+        Session lifetime and idle timeout are bounded by server configuration.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                idleTimeoutMs: {type: number}
+                maxSessionMs: {type: number}
+                browserSettings:
+                  $ref: '#/components/schemas/BrowserSettings'
+            example:
+              browserSettings:
+                viewport: {width: 1440, height: 900}
+      responses:
+        '201':
+          description: Session connection information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CdpSession'
+        default:
+          $ref: '#/components/responses/ApiError'
+    get:
+      operationId: listCdpSessions
+      tags: [Remote CDP]
+      summary: List temporary sessions for the current API key
+      responses:
+        '200':
+          description: Sessions wrapped in ok and data.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [ok, data]
+                properties:
+                  ok: {type: boolean}
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CdpSession'
+        default:
+          $ref: '#/components/responses/ApiError'
+  /cdp/sessions/{sessionId}:
+    parameters:
+      - $ref: '#/components/parameters/SessionId'
+    delete:
+      operationId: deleteCdpSession
+      tags: [Remote CDP]
+      summary: Terminate a temporary session
+      description: The session must belong to the current API key.
+      responses:
+        '200':
+          description: Session terminated.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: {type: boolean}
+        default:
+          $ref: '#/components/responses/ApiError'
+  /cdp/sessions/{sessionId}/json/version:
+    parameters:
+      - $ref: '#/components/parameters/SessionId'
+    get:
+      operationId: getCdpDiscovery
+      tags: [Remote CDP]
+      summary: Read Chrome DevTools Protocol discovery
+      description: >-
+        Authenticate using the data token already embedded in cdpBaseUrl.
+        webSocketDebuggerUrl is rewritten to a public session-scoped URL.
+        Use returned URLs rather than constructing connection URLs manually.
+      security:
+        - CdpDataToken: []
+      responses:
+        '200':
+          description: Chrome discovery metadata.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Browser: {type: string}
+                  Protocol-Version: {type: string}
+                  User-Agent: {type: string}
+                  webSocketDebuggerUrl: {type: string, format: uri}
+                additionalProperties: true
+        default:
+          $ref: '#/components/responses/ApiError'
+  /cdp/live-token:
+    post:
+      operationId: createLiveControlToken
+      tags: [Remote CDP]
+      summary: Issue a single-use live-control token
+      description: >-
+        The API key must own the session. Returns a controlUrl containing a
+        single-use controlToken, valid for 30 seconds. Connect to that WebSocket
+        URL using the live-control protocol documented on the website.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [sessionId]
+              properties:
+                sessionId: {type: string}
+      responses:
+        '200':
+          description: Live-control connection information.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [ok, controlUrl, expiresAt]
+                properties:
+                  ok: {type: boolean}
+                  controlUrl: {type: string, format: uri}
+                  expiresAt:
+                    type: integer
+                    format: int64
+                    description: Token expiry as Unix milliseconds, not an RFC3339 string.
+        default:
+          $ref: '#/components/responses/ApiError'
+components:
+  securitySchemes:
+    ApiKey:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: Full API key created in the AdsCrawl dashboard.
+    SessionBearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Login session JWT. Do not put an API key in the Bearer header.
+    SessionCookie:
+      type: apiKey
+      in: cookie
+      name: access_token
+      description: Owner login session; subject to browser cookie and origin policies.
+    CdpDataToken:
+      type: apiKey
+      in: query
+      name: token
+      description: Scoped data token from cdpBaseUrl; not the account API key.
+  parameters:
+    CloudBrowserId:
+      name: id
+      in: path
+      required: true
+      description: Saved profile ID; distinct from its runtime session ID.
+      schema: {type: string, format: uuid}
+    SessionId:
+      name: sessionId
+      in: path
+      required: true
+      description: Temporary CDP session ID returned by create or list.
+      schema: {type: string}
+  responses:
+    ApiError:
+      description: >-
+        Error response. Typical statuses are 400 invalid input, 401 invalid
+        authentication, 402 payment/credits required, 403 ownership mismatch,
+        404 missing resource, 409 state or quota conflict, 410 expired session,
+        429 rate/concurrency limit, 500 internal failure, 502 upstream failure,
+        503 capacity/runtime unavailable, or 504 timeout. Not every status
+        applies to every operation. Use HTTP status and code when present.
+      headers:
+        X-Trace-Id:
+          description: Request correlation identifier.
+          schema: {type: string}
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TaskError:
+      description: >-
+        Browser-task failure. 400 invalid URL/options; 401 invalid API key;
+        402 INSUFFICIENT_CREDITS; 404 unavailable Chrome Web Store listing;
+        422 missing content/fields or invalid extraction configuration;
+        429 rate limit; 500 unclassified failure; 502 proxy/target failure;
+        503 queue/worker unavailable; 504 task/navigation/proxy timeout.
+        A target HTTP 403 may be wrapped as a service HTTP 502: inspect code
+        and upstreamStatus when supplied rather than assuming a proxy failure.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    CloudStartError:
+      description: >-
+        Start/launch failed. Includes 400 PROXY_REQUIRED or INVALID_PROXY,
+        402 PAID_PLAN_REQUIRED or INSUFFICIENT_CREDITS, 409
+        CLOUD_BROWSER_CONCURRENCY_LIMIT, and runtime 5xx failures. Errors after
+        profile creation may include id, source, deleted, runtime, and Location.
+        An unconfirmed cleanup remains stopping and reserves quota. Do not
+        automatically repeat launch; inspect the existing profile and stop it.
+      headers:
+        Location:
+          description: Profile detail URL if a profile was created.
+          schema: {type: string}
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/Error'
+              - $ref: '#/components/schemas/CloudLifecycleResult'
+  schemas:
+    Error:
+      type: object
+      properties:
+        error: {type: string}
+        code: {type: string}
+        traceId: {type: string}
+        retryable: {type: boolean}
+      additionalProperties: true
+    Proxy:
+      type: object
+      description: >-
+        Use server OR protocol/host/port. server must be an http:// or socks5://
+        URL with an explicit port, without embedded credentials, query, fragment,
+        or non-root path. Port range is 1-65535. Provide both non-empty username
+        and password, or omit both. Custom proxy and countryCode are mutually
+        exclusive. Proxy failures never fall back to a direct connection.
+      properties:
+        server: {type: string, example: 'http://proxy.example.com:8080'}
+        protocol: {type: string, enum: [http, socks5]}
+        host: {type: string}
+        port:
+          oneOf:
+            - {type: integer, minimum: 1, maximum: 65535}
+            - {type: string, pattern: '^[0-9]+$'}
+        username: {type: string, minLength: 1, writeOnly: true}
+        password: {type: string, minLength: 1, writeOnly: true}
+      oneOf:
+        - required: [server]
+          not: {required: [host]}
+        - required: [protocol, host, port]
+          not: {required: [server]}
+    Viewport:
+      type: object
+      required: [width, height]
+      properties:
+        width: {type: number}
+        height: {type: number}
+    Geolocation:
+      type: object
+      required: [latitude, longitude]
+      properties:
+        latitude: {type: number}
+        longitude: {type: number}
+    Fingerprint:
+      type: object
+      description: >-
+        Browser fingerprint modes. Defaults and supported combinations depend
+        on the workflow; the server maintains a coherent identity and seed.
+      properties:
+        webRtc: {type: string, enum: [forward, real, disabled]}
+        webGl: {type: string, enum: [random, real]}
+        webGpu: {type: string, enum: [random, real, disabled]}
+        webGlImage: {type: string, enum: [random, real]}
+        canvas: {type: string, enum: [random, real]}
+        audioContext: {type: string, enum: [random, real]}
+        clientRects: {type: string, enum: [random, real]}
+        speechVoices: {type: string, enum: [random, real]}
+        fonts: {type: string, enum: [random, real]}
+        hardware: {type: string, enum: [random, real]}
+        doNotTrack: {type: string, enum: [random, enabled, disabled]}
+        hardwareConcurrency: {type: integer, minimum: 1, maximum: 64}
+        deviceMemory: {type: integer, minimum: 1, maximum: 64}
+    Cookie:
+      type: object
+      required: [name, domain]
+      description: >-
+        Preset browser cookie. Use native JSON booleans. Legacy browser-task
+        inputs also accept compatibility forms for some flags. Launch defaults
+        an omitted value to an empty string. Expiry aliases are Unix seconds.
+      properties:
+        name: {type: string, minLength: 1}
+        value: {type: string, default: ''}
+        domain: {type: string, minLength: 1}
+        path: {type: string, default: /}
+        secure: {type: boolean}
+        httpOnly: {type: boolean}
+        hostOnly: {type: boolean}
+        sameSite: {type: string, enum: [Strict, Lax, None]}
+        session: {type: boolean}
+        expires: {type: number}
+        expirationDate: {type: number}
+        expiry: {type: number}
+    BrowserSettings:
+      type: object
+      description: >-
+        Reusable browser options. proxy and countryCode cannot be supplied
+        together. Browser tasks and temporary CDP sessions use a managed proxy
+        when selection is omitted. Cloud browser API-key starts have stricter
+        top-level custom proxy requirements described on their operations.
+      properties:
+        viewport:
+          $ref: '#/components/schemas/Viewport'
+        locale: {type: string, example: en-US}
+        timezoneId: {type: string, example: Asia/Shanghai}
+        geolocation:
+          $ref: '#/components/schemas/Geolocation'
+        proxy:
+          $ref: '#/components/schemas/Proxy'
+        countryCode:
+          type: string
+          description: GLOBAL or a two-letter region code; cannot be combined with proxy.
+          example: US
+        userAgent: {type: string}
+        userAgentMode: {type: string, enum: [custom, random]}
+        userAgentOs: {type: string, enum: [windows, macos]}
+        fingerprint:
+          $ref: '#/components/schemas/Fingerprint'
+        cookies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Cookie'
+    TaskOptions:
+      allOf:
+        - $ref: '#/components/schemas/BrowserSettings'
+        - type: object
+          properties:
+            url:
+              type: string
+              description: Public HTTP(S) URL on port 80 or 443; template-specific rules may apply.
+            waitUntil:
+              type: string
+              enum: [load, domcontentloaded, networkidle]
+              description: Navigation readiness. networkidle may time out on long-polling pages.
+            timeoutMs:
+              type: number
+              description: Positive timeout up to 3600000 ms; invalid values use the server default.
+    HtmlRequest:
+      allOf:
+        - $ref: '#/components/schemas/TaskOptions'
+        - type: object
+          required: [url]
+          properties:
+            contentMode: {type: string, enum: [html, markdown, json], default: html}
+            selector:
+              type: string
+              description: Optional CSS selector for targeted content.
+    ScreenshotRequest:
+      allOf:
+        - $ref: '#/components/schemas/TaskOptions'
+        - type: object
+          required: [url]
+          properties:
+            fullPage: {type: boolean, default: true}
+            selector:
+              type: string
+              description: Capture the first matching element; takes precedence over fullPage.
+    SpaRequest:
+      allOf:
+        - $ref: '#/components/schemas/TaskOptions'
+        - type: object
+          properties:
+            keyword:
+              type: string
+              description: For google-trends-explore, 1-5 unique comma-separated keywords, each at most 100 Unicode characters.
+            mode: {type: string, enum: [inspect, extract]}
+            template: {type: string}
+            parameters: {type: object, additionalProperties: true}
+            waitFor:
+              $ref: '#/components/schemas/WaitFor'
+            actions:
+              type: array
+              items:
+                $ref: '#/components/schemas/Action'
+            fields:
+              type: object
+              additionalProperties:
+                $ref: '#/components/schemas/ExtractionField'
+            schema:
+              type: object
+              description: Legacy field mapping (string selectors or field objects), optionally wrapped in properties. Used only if fields is absent.
+              additionalProperties: true
+    WaitFor:
+      type: object
+      properties:
+        selector: {type: string}
+        text: {type: string}
+        timeoutMs: {type: number, default: 15000}
+    ExtractionField:
+      type: object
+      required: [source]
+      properties:
+        source: {type: string, enum: [dom, network]}
+        selector: {type: string}
+        value: {type: string, enum: [text, html, attribute], default: text}
+        attribute: {type: string}
+        urlIncludes: {type: string}
+        path: {type: string, description: 'JSON path for a matching network response.'}
+        multiple: {type: boolean}
+        parse: {type: string, enum: [string, number, integer, boolean, json]}
+        regex: {type: string}
+        required: {type: boolean}
+    Action:
+      oneOf:
+        - type: object
+          required: [type, milliseconds]
+          properties:
+            type: {type: string, enum: [wait]}
+            milliseconds: {type: number}
+        - type: object
+          required: [type, selector]
+          properties:
+            type: {type: string, enum: [waitForSelector]}
+            selector: {type: string}
+            timeoutMs: {type: number}
+        - type: object
+          required: [type, selector]
+          properties:
+            type: {type: string, enum: [click]}
+            selector: {type: string}
+        - type: object
+          required: [type, selector, value]
+          properties:
+            type: {type: string, enum: [fill]}
+            selector: {type: string}
+            value: {type: string}
+        - type: object
+          required: [type, selector, key]
+          properties:
+            type: {type: string, enum: [press]}
+            selector: {type: string}
+            key: {type: string}
+        - type: object
+          required: [type]
+          properties:
+            type: {type: string, enum: [scroll]}
+            selector: {type: string}
+            x: {type: number}
+            y: {type: number}
+    ExtractionTemplate:
+      type: object
+      properties:
+        id: {type: string}
+        name: {type: string}
+        description: {type: string}
+        urlPattern: {type: string}
+        exampleUrl: {type: string}
+        version: {type: integer}
+        updatedAt: {type: string, format: date-time}
+        outputFields: {type: array, items: {type: string}}
+        waitUntil: {type: string}
+        input: {type: object, additionalProperties: true}
+        catalog: {type: object, additionalProperties: true}
+      additionalProperties: true
+    CloudLaunchRequest:
+      type: object
+      required: [proxy]
+      additionalProperties: false
+      properties:
+        proxy:
+          $ref: '#/components/schemas/Proxy'
+        apiKeyId:
+          type: string
+          format: uuid
+          description: Required with session authentication. With API-key authentication, any supplied ID must match that key.
+        tabs:
+          type: array
+          maxItems: 8
+          description: HTTP(S) URLs; at most one tab may be active. When none is active, the first is selected.
+          items:
+            oneOf:
+              - {type: string, format: uri}
+              - type: object
+                required: [url]
+                properties:
+                  url: {type: string, format: uri}
+                  active: {type: boolean, default: false}
+        cookies:
+          type: array
+          maxItems: 10000
+          items:
+            $ref: '#/components/schemas/Cookie'
+        fingerprint:
+          $ref: '#/components/schemas/Fingerprint'
+    CloudStartRequest:
+      type: object
+      description: API-key callers must provide proxy; session callers must provide apiKeyId. These requirements depend on authentication.
+      properties:
+        proxy:
+          $ref: '#/components/schemas/Proxy'
+        apiKeyId: {type: string, format: uuid}
+        countryCode:
+          type: string
+          description: Session authentication only; cannot be combined with proxy.
+        cookies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Cookie'
+        fingerprint:
+          $ref: '#/components/schemas/Fingerprint'
+    CloudRuntime:
+      type: object
+      required: [status]
+      properties:
+        runtimeKind: {type: string, enum: [neko, worker_cdp]}
+        status: {type: string, enum: [starting, running, stopping, stopped]}
+        sessionId: {type: string}
+        expiresAt: {type: string, format: date-time}
+        connectUrl:
+          type: string
+          format: uri
+          description: Optional interactive viewer URL when running; requires the profile owner's login session.
+        cdpBaseUrl:
+          type: string
+          format: uri
+          description: Only worker_cdp may return this; neko omits it.
+    CloudBrowser:
+      type: object
+      properties:
+        id: {type: string, format: uuid}
+        source: {type: string, enum: [manual, launch]}
+        deleteOnStop: {type: boolean, description: 'Current profiles are retained on stop; false.'}
+        deleted: {type: boolean}
+        remark: {type: string}
+        browserSettings:
+          type: object
+          description: Saved browser settings with proxy credentials removed; may include owner-readable cookies and snapshots.
+          additionalProperties: true
+        proxyDisplayIp: {type: string, nullable: true}
+        proxyDisplayRegion: {type: string, nullable: true}
+        lastOpenedAt: {type: string, format: date-time, nullable: true}
+        updatedAt: {type: string, format: date-time}
+        runtime:
+          $ref: '#/components/schemas/CloudRuntime'
+    CloudLifecycleResult:
+      type: object
+      properties:
+        ok: {type: boolean}
+        id: {type: string, format: uuid}
+        source: {type: string, enum: [manual, launch]}
+        deleteOnStop: {type: boolean}
+        deleted: {type: boolean}
+        runtime:
+          $ref: '#/components/schemas/CloudRuntime'
+        traceId: {type: string}
+    CdpSession:
+      type: object
+      required: [sessionId, expiresAt, cdpBaseUrl]
+      properties:
+        sessionId: {type: string}
+        expiresAt: {type: string, format: date-time}
+        cdpBaseUrl:
+          type: string
+          format: uri
+          description: Use as returned. Contains a scoped data token and must be treated as sensitive.
+      additionalProperties: true

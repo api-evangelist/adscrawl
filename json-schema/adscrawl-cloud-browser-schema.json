@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/adscrawl/main/json-schema/adscrawl-cloud-browser-schema.json",
+  "title": "CloudBrowser",
+  "x-generated": "2026-10-02",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/adscrawl-openapi.yaml#/components/schemas/CloudBrowser",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "source": {
+      "type": "string",
+      "enum": [
+        "manual",
+        "launch"
+      ]
+    },
+    "deleteOnStop": {
+      "type": "boolean",
+      "description": "Current profiles are retained on stop; false."
+    },
+    "deleted": {
+      "type": "boolean"
+    },
+    "remark": {
+      "type": "string"
+    },
+    "browserSettings": {
+      "type": "object",
+      "description": "Saved browser settings with proxy credentials removed; may include owner-readable cookies and snapshots.",
+      "additionalProperties": true
+    },
+    "proxyDisplayIp": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "proxyDisplayRegion": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "lastOpenedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "runtime": {
+      "$ref": "#/$defs/CloudRuntime"
+    }
+  },
+  "$defs": {
+    "CloudRuntime": {
+      "type": "object",
+      "required": [
+        "status"
+      ],
+      "properties": {
+        "runtimeKind": {
+          "type": "string",
+          "enum": [
+            "neko",
+            "worker_cdp"
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "starting",
+            "running",
+            "stopping",
+            "stopped"
+          ]
+        },
+        "sessionId": {
+          "type": "string"
+        },
+        "expiresAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "connectUrl": {
+          "type": "string",
+          "format": "uri",
+          "description": "Optional interactive viewer URL when running; requires the profile owner's login session."
+        },
+        "cdpBaseUrl": {
+          "type": "string",
+          "format": "uri",
+          "description": "Only worker_cdp may return this; neko omits it."
+        }
+      }
+    }
+  }
+}

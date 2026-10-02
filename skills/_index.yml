@@ -1,0 +1,19 @@
+generated: '2026-10-02'
+method: generated
+generator: extract-docs-artifacts.py skills (local)
+source: openapi/adscrawl-openapi.yaml
+skills:
+- file: skills/adscrawl-create-and-launch-cloud-browser.md
+  name: adscrawl-create-and-launch-cloud-browser
+  api: openapi/adscrawl-openapi.yaml
+  operations:
+  - createCloudBrowser
+  - launchCloudBrowser
+- file: skills/adscrawl-remote-cdp-session-workflow.md
+  name: adscrawl-remote-cdp-session-workflow
+  api: openapi/adscrawl-openapi.yaml
+  operations:
+  - createCdpSession
+  - getCdpDiscovery
+  - createLiveControlToken
+  - deleteCdpSession

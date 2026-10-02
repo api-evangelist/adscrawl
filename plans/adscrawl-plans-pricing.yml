@@ -1,0 +1,28 @@
+generated: '2026-10-02'
+method: searched
+generator: extract-docs-artifacts.py (local)
+source: https://docs.adscrawl.net/pricing
+sources:
+- https://docs.adscrawl.net/pricing
+- https://docs.adscrawl.net/pricing.md
+name: AdsCrawl pricing
+audience: developer-api
+pricing_basis: per-seat
+plans:
+- name: Free
+  price_text: $0 — no monthly fee
+  price: 0
+  description: 500 one-time credits, 1 Cloud Browser profile, 1 API key
+- name: Hobby
+  price_text: $9 / month
+  price: 9
+  description: 3,000 credits per month, 20 Cloud Browser profiles, 3 API keys
+- name: Starter
+  price_text: $49 / month
+  price: 49
+  description: 100,000 credits per month, 50 Cloud Browser profiles, 10 API keys
+- name: Pro
+  price_text: $199 / month
+  price: 199
+  description: 500,000 credits per month, 200 Cloud Browser profiles, 30 API keys
+docs: https://docs.adscrawl.net/pricing

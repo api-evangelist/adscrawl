@@ -1,30 +1,164 @@
 aid: adscrawl
 name: AdsCrawl
-description: 'AdsCrawl is a company surfaced via the API Evangelist harvest backlog (source: new-submission)
-  and added to the network as a stub for full-pipeline profiling.'
+description: AdsCrawl provides a Browser Automation API that lets developers run full browsers (Playwright, Puppeteer, or Chrome DevTools Protocol)
+  with residential proxy routing to handle dynamic pages, authenticated sessions, and structured web data extraction. The platform offers endpoints
+  for page rendering, screenshot capture, HTML extraction, and data scraping, targeting use cases like e‑commerce monitoring, SEO analysis, and
+  content aggregation. It emphasizes real‑browser fidelity and scalable proxy infrastructure for reliable web data collection.
 url: https://raw.githubusercontent.com/api-evangelist/adscrawl/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:new-submission
-x-tier: stub
-x-tier-reason: harvest
+x-tier: profiled
+x-tier-reason: enrichment pass 2026-10-02 (modular-v1; was harvest)
 specificationVersion: '0.20'
 created: '2026-10-02'
 modified: '2026-10-02'
 tags:
 - Company
-apis: []
+- BrowserAutomation
+- WebDataExtraction
+- Playwright
+- Puppeteer
+- CDP
+image: https://www.adscrawl.net/logo.svg
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: AgenticAccess
+  url: agentic-access/adscrawl-agentic-access.yml
+- type: Plans
+  url: plans/adscrawl-plans-pricing.yml
+- type: Spectral
+  url: rules/adscrawl-rules.yml
+- type: JSONLD
+  url: json-ld/adscrawl-context.jsonld
+- type: Vocabulary
+  url: vocabulary/adscrawl-vocabulary.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: DataModel
+  url: data-model/adscrawl-data-model.yml
+- type: Conventions
+  url: conventions/adscrawl-conventions.yml
+- type: Authentication
+  url: authentication/adscrawl-authentication.yml
+- type: ErrorCatalog
+  url: errors/adscrawl-problem-types.yml
+- type: Conformance
+  url: conformance/adscrawl-conformance.yml
+- type: LLMsTxt
+  url: llms/adscrawl-llms.txt
+- type: AgentCard
+  url: a2a/adscrawl-a2a.yml
+- type: WellKnown
+  url: well-known/adscrawl-well-known.yml
+- type: Hosts
+  url: hosts/adscrawl-hosts.yml
+- type: Vendors
+  url: vendors/adscrawl-vendors.yml
+- type: SDKs
+  url: packages/adscrawl-packages.yml
+- type: Packages
+  url: packages/adscrawl-packages.yml
+- type: TermsOfService
+  url: https://www.adscrawl.net/terms-of-service
+- type: PrivacyPolicy
+  url: https://www.adscrawl.net/privacy-policy
+- type: Pricing
+  url: https://docs.adscrawl.net/pricing
+- type: Login
+  url: https://www.adscrawl.net/login
+- type: GitHubOrganization
+  url: https://github.com/AdsCrawl
+- type: Blog
+  url: https://blog.adscrawl.net/
+- type: APIReference
+  url: https://docs.adscrawl.net/api-reference/introduction
+- type: GettingStarted
+  url: https://docs.adscrawl.net/quickstart
+- type: DeveloperPortal
+  url: https://api.adscrawl.net`
+- type: DomainSecurity
+  url: security/adscrawl-domain-security.yml
 - type: Website
   url: https://www.adscrawl.net/
 - type: Documentation
   url: https://docs.adscrawl.net
-x-submission-notes: Browser automation and web-data API (rendered HTML/Markdown, extraction, screenshots,
-  CDP sessions).
-x-submission-probe: root 200; docs 200; llms.txt 200 (both); api.adscrawl.net 404 JSON (live API host);
-  no OpenAPI found; 404 probe 404
+apis:
+- aid: adscrawl:adscrawl-browser-tasks-api
+  name: AdsCrawl Browser tasks API
+  description: Synchronous rendered content, screenshots, and structured extraction.
+  humanURL: https://docs.adscrawl.net/api-reference/introduction
+  baseURL: https://api.adscrawl.net
+  tags:
+  - Browser tasks
+  properties:
+  - type: OpenAPI
+    url: openapi/adscrawl-browser-tasks-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/adscrawl-browser-settings-schema.json
+  - type: JSONSchema
+    url: json-schema/adscrawl-spa-request-schema.json
+  - type: JSONSchema
+    url: json-schema/adscrawl-cloud-launch-request-schema.json
+  - type: JSONSchema
+    url: json-schema/adscrawl-cloud-browser-schema.json
+  - type: JSONSchema
+    url: json-schema/adscrawl-extraction-template-schema.json
+  - type: JSONSchema
+    url: json-schema/adscrawl-cloud-start-request-schema.json
+- aid: adscrawl:adscrawl-cloud-browsers-api
+  name: AdsCrawl Cloud browsers API
+  description: Persistent profiles and browser lifecycle. Starting requires a paid plan.
+  humanURL: https://docs.adscrawl.net/api-reference/introduction
+  baseURL: https://api.adscrawl.net
+  tags:
+  - Cloud browsers
+  properties:
+  - type: OpenAPI
+    url: openapi/adscrawl-cloud-browsers-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/adscrawl-browser-settings-schema.json
+  - type: JSONSchema
+    url: json-schema/adscrawl-spa-request-schema.json
+  - type: JSONSchema
+    url: json-schema/adscrawl-cloud-launch-request-schema.json
+  - type: JSONSchema
+    url: json-schema/adscrawl-cloud-browser-schema.json
+  - type: JSONSchema
+    url: json-schema/adscrawl-extraction-template-schema.json
+  - type: JSONSchema
+    url: json-schema/adscrawl-cloud-start-request-schema.json
+- aid: adscrawl:adscrawl-remote-cdp-api
+  name: AdsCrawl Remote CDP API
+  description: Temporary browser sessions and scoped connection tokens.
+  humanURL: https://docs.adscrawl.net/api-reference/introduction
+  baseURL: https://api.adscrawl.net
+  tags:
+  - Remote CDP
+  properties:
+  - type: OpenAPI
+    url: openapi/adscrawl-remote-cdp-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/adscrawl-browser-settings-schema.json
+  - type: JSONSchema
+    url: json-schema/adscrawl-spa-request-schema.json
+  - type: JSONSchema
+    url: json-schema/adscrawl-cloud-launch-request-schema.json
+  - type: JSONSchema
+    url: json-schema/adscrawl-cloud-browser-schema.json
+  - type: JSONSchema
+    url: json-schema/adscrawl-extraction-template-schema.json
+  - type: JSONSchema
+    url: json-schema/adscrawl-cloud-start-request-schema.json
+x-submission-notes: Browser automation and web-data API (rendered HTML/Markdown, extraction, screenshots, CDP sessions).
+x-submission-probe: root 200; docs 200; llms.txt 200 (both); api.adscrawl.net 404 JSON (live API host); no OpenAPI found; 404 probe 404
 x-submitted-by: support@adscrawl.net (apis.io/add, 2026-09-30)
+x-enrichment:
+  date: '2026-10-02'
+  status: enriched
+  artifacts_added: 30
+  pass: modular-v1
+  engine: identity=local,contract=local,surfaces=local,docs=local,regulatory=local

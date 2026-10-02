@@ -1,0 +1,81 @@
+# AdsCrawl
+
+> Connect with Playwright, Puppeteer, or CDP and run jobs in a full browser environment with residential proxy routing—built for dynamic pages, authenticated sessions, and sites that stop basic scrapers.
+
+## Documentation
+
+### Get Started
+
+- [AdsCrawl: Browser Automation API for Scraping the Web](https://docs.adscrawl.net/introduction.md): AdsCrawl is a browser automation API for developers who need rendered HTML, structured data, screenshots, and full CDP sessions via residential proxies.
+- [Quick Start: Make Your First AdsCrawl API Request Today](https://docs.adscrawl.net/quickstart.md): Create a free AdsCrawl account, grab your API key from the dashboard, and make your first rendered HTML or Markdown request in under five minutes.
+- [API Keys, Session JWTs, and CDP Tokens in AdsCrawl](https://docs.adscrawl.net/authentication.md): Learn how to use API keys, session JWTs, and CDP data tokens to authenticate every AdsCrawl request securely from your backend server.
+
+#### SDKs & Integrations
+
+- [AdsCrawl SDKs and Integrations](https://docs.adscrawl.net/sdks/overview.md): Official AdsCrawl SDKs for JavaScript, Python, Go, Ruby, and PHP. Zero runtime dependencies, server-side use, and no automatic retries of metered requests.
+- [JavaScript and TypeScript SDK for AdsCrawl](https://docs.adscrawl.net/sdks/javascript.md): Install and use the AdsCrawl JavaScript SDK to fetch rendered content, screenshots, structured data, and remote CDP browser sessions. Node.js 20+, zero runtime dependencies.
+- [Python SDK for AdsCrawl](https://docs.adscrawl.net/sdks/python.md): Install and use the AdsCrawl Python SDK to fetch rendered content, screenshots, structured data, and remote CDP browser sessions. Python 3.9+, zero runtime dependencies.
+- [Go SDK for AdsCrawl](https://docs.adscrawl.net/sdks/go.md): Install and use the AdsCrawl Go SDK to fetch rendered content, screenshots, structured data, and manage remote CDP sessions. Go 1.21+, context-aware, zero runtime dependencies.
+- [Ruby SDK for AdsCrawl](https://docs.adscrawl.net/sdks/ruby.md): Install and use the AdsCrawl Ruby SDK to fetch rendered content, screenshots, structured data, and manage remote CDP sessions. Ruby 3.1+, standard library only.
+- [PHP SDK for AdsCrawl](https://docs.adscrawl.net/sdks/php.md): Install and use the AdsCrawl PHP SDK to fetch rendered content, screenshots, structured data, and manage remote CDP sessions. PHP 8.1+, standard JSON and cURL extensions only.
+- [AdsCrawl Codex Plugin](https://docs.adscrawl.net/sdks/codex.md): Use the AdsCrawl Codex plugin to render pages, and capture full-page screenshots from OpenAI Codex. Requires Python 3.9+ and an API key.
+
+### Core Concepts
+
+- [Browser Tasks: HTML, Screenshots, and Data Extraction](https://docs.adscrawl.net/concepts/browser-tasks.md): Synchronous, credit-metered requests that spin up a full browser and return rendered HTML, screenshots, or structured data — no session management needed.
+- [Remote CDP: Connect Any CDP Client to a Cloud Browser](https://docs.adscrawl.net/concepts/remote-cdp.md): Spin up a dedicated cloud Chromium session and connect to it with Playwright, Puppeteer, or raw CDP — fully managed, no infrastructure required.
+- [Cloud Browsers: Persistent, Reusable Browser Profiles](https://docs.adscrawl.net/concepts/cloud-browsers.md): Save browser profiles with cookies, fingerprints, and proxy settings that persist across sessions — launch, stop, and reuse them as many times as you need.
+- [Proxy Routing: Built-In, Regional, and Custom Proxies](https://docs.adscrawl.net/concepts/proxies.md): Every AdsCrawl browser runs through a proxy. Learn how to use built-in residential proxies, route by country, or supply your own proxy server.
+
+### Guides
+
+- [Fetch Rendered HTML, Markdown, and JSON from Any Page](https://docs.adscrawl.net/guides/fetch-html.md): Use POST /html to retrieve fully rendered page content as raw HTML, clean Markdown, or structured JSON — no browser management required.
+- [Extract Structured Data from JavaScript-Heavy Pages](https://docs.adscrawl.net/guides/extract-data.md): Use POST /spa-extract to pull typed fields from SPAs via DOM selectors or network interception, or apply a pre-built template for popular sites.
+- [Capture Full-Page and Element Screenshots with AdsCrawl](https://docs.adscrawl.net/guides/screenshots.md): Use POST /screenshot to capture a full-page or single-element PNG from any URL, with proxy routing, custom viewports, and locale support.
+- [Automate Browsers with Playwright via Remote CDP Sessions](https://docs.adscrawl.net/guides/playwright-automation.md): Connect Playwright or Puppeteer to a remote AdsCrawl cloud browser over CDP to run full multi-step automation through residential proxies.
+- [Create and Manage Persistent Cloud Browser Sessions](https://docs.adscrawl.net/guides/cloud-browser-sessions.md): Create persistent cloud browser profiles with saved cookies and fingerprints, launch them on demand, and view them live in the interactive browser.
+
+### Pricing & Limits
+
+- [AdsCrawl Pricing: Free, Hobby, Starter, and Pro Plans](https://docs.adscrawl.net/pricing.md): Compare Free, Hobby, Starter, and Pro plans. Choose the credit allowance, Cloud Browser profiles, and API keys that fit your automation needs.
+- [AdsCrawl Credits, Rate Limits, and Concurrency Caps](https://docs.adscrawl.net/credits-and-limits.md): Understand how AdsCrawl credits are consumed, how rate limits and concurrency caps apply, and which error codes signal billing or capacity issues.
+
+## API Reference
+
+### Overview
+
+- [AdsCrawl REST API Introduction](https://docs.adscrawl.net/api-reference/introduction.md): Base URL, authentication, JSON request bodies, credits consumption, common HTTP status codes, and links to all AdsCrawl API endpoint groups and schemas.
+- [API Schema Reference — Shared Types for All Endpoints](https://docs.adscrawl.net/api-reference/schemas.md): Reusable schema definitions for browserSettings, proxy, fingerprint, cookies, waitFor, field, and actions across all AdsCrawl endpoints.
+
+### Browser Tasks
+
+- [Render HTML, Markdown, or Article JSON](https://docs.adscrawl.net/api-reference/html.md): Fetch a fully rendered page in raw HTML, readable Markdown, or structured article JSON, routed through residential proxies.
+- [Capture Screenshot](https://docs.adscrawl.net/api-reference/screenshot.md): Render any URL in a real browser and return a full-page or element-scoped PNG screenshot, routed through residential proxies.
+- [Extract SPA Data](https://docs.adscrawl.net/api-reference/spa-extract.md): Extract structured data from JavaScript-heavy SPAs using custom CSS or network fields, built-in templates, or inspect mode to discover extraction candidates.
+- [List Templates](https://docs.adscrawl.net/api-reference/spa-extract-templates.md): Retrieve the list of available built-in extraction templates with their input types, example URLs, expected output fields, and metadata.
+
+### Remote CDP
+
+- [Create CDP Session](https://docs.adscrawl.net/api-reference/cdp-sessions.md): Launch a dedicated Chromium instance and receive a CDP base URL with an embedded data token for authenticated browser control.
+- [List CDP Sessions](https://docs.adscrawl.net/api-reference/cdp-sessions-list.md): Retrieve all active CDP sessions associated with your API key, including session IDs, expiry times, and CDP base URLs.
+- [Delete CDP Session](https://docs.adscrawl.net/api-reference/cdp-sessions-delete.md): Immediately terminate a CDP session and release its capacity so it no longer counts against your concurrency limit.
+- [Discover CDP Endpoint](https://docs.adscrawl.net/api-reference/cdp-sessions-version.md): Retrieve the Chrome DevTools Protocol discovery JSON for a session, including the pre-rewritten WebSocket debugger URL.
+- [Issue Live Control Token](https://docs.adscrawl.net/api-reference/cdp-live-token.md): Issue a single-use, 30-second control token to take live interactive control of an existing CDP session via a dedicated WebSocket connection.
+
+### Cloud Browsers
+
+- [List Cloud Browser Profiles](https://docs.adscrawl.net/api-reference/cloud-browsers-list.md): List all saved cloud browser profiles for your account along with pagination metadata and your plan's saved-profile and concurrent-running allowances.
+- [Get Cloud Browser Profile](https://docs.adscrawl.net/api-reference/cloud-browsers-get.md): Fetch the full state of a single saved cloud browser profile by its persistent UUID. Check runtime status, connect URL, and profile settings.
+- [Create Browser Profile](https://docs.adscrawl.net/api-reference/cloud-browsers-create.md): Save a new cloud browser profile with optional viewport, locale, proxy, cookies, and fingerprint settings. No browser session starts and no running quota is consumed.
+- [Create and Launch Browser](https://docs.adscrawl.net/api-reference/cloud-browsers-launch.md): Create a cloud browser profile and start it in one request. Returns 201 only after the browser reaches running state with a live connectUrl.
+- [Start Cloud Browser](https://docs.adscrawl.net/api-reference/cloud-browsers-start.md): Start a saved cloud browser profile and wait for it to reach running state. Returns 200 with a live connectUrl only after the browser is ready.
+- [Stop Cloud Browser](https://docs.adscrawl.net/api-reference/cloud-browsers-stop.md): Stop a running cloud browser, end billing, and release the concurrent running slot. The saved profile is retained for future restarts.
+
+> The links below point to documentation indexes. Follow each `/_llms/` index recursively until you reach documentation pages.
+
+## Indexes
+
+- [Chinese (38 pages)](https://docs.adscrawl.net/_llms/zh.md): Documentation for Chinese.
+
+
+This documentation is built and hosted on [Mintlify](https://mintlify.com), a developer documentation platform.
