@@ -1,0 +1,30 @@
+aid: adscrawl
+name: AdsCrawl
+description: 'AdsCrawl is a company surfaced via the API Evangelist harvest backlog (source: new-submission)
+  and added to the network as a stub for full-pipeline profiling.'
+url: https://raw.githubusercontent.com/api-evangelist/adscrawl/refs/heads/main/apis.yml
+x-type: company
+x-source: harvest:new-submission
+x-tier: stub
+x-tier-reason: harvest
+specificationVersion: '0.20'
+created: '2026-10-02'
+modified: '2026-10-02'
+tags:
+- Company
+apis: []
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
+- FN: APIs.json
+  email: info@apis.io
+common:
+- type: Website
+  url: https://www.adscrawl.net/
+- type: Documentation
+  url: https://docs.adscrawl.net
+x-submission-notes: Browser automation and web-data API (rendered HTML/Markdown, extraction, screenshots,
+  CDP sessions).
+x-submission-probe: root 200; docs 200; llms.txt 200 (both); api.adscrawl.net 404 JSON (live API host);
+  no OpenAPI found; 404 probe 404
+x-submitted-by: support@adscrawl.net (apis.io/add, 2026-09-30)
