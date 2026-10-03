@@ -240,131 +240,6 @@ paths:
           $ref: '#/components/responses/ApiError'
 components:
   schemas:
-    Viewport:
-      type: object
-      required:
-      - width
-      - height
-      properties:
-        width:
-          type: number
-        height:
-          type: number
-    Cookie:
-      type: object
-      required:
-      - name
-      - domain
-      description: Preset browser cookie. Use native JSON booleans. Legacy browser-task inputs also accept compatibility forms for some flags. Launch defaults an omitted value to an empty string. Expiry aliases are Unix seconds.
-      properties:
-        name:
-          type: string
-          minLength: 1
-        value:
-          type: string
-          default: ''
-        domain:
-          type: string
-          minLength: 1
-        path:
-          type: string
-          default: /
-        secure:
-          type: boolean
-        httpOnly:
-          type: boolean
-        hostOnly:
-          type: boolean
-        sameSite:
-          type: string
-          enum:
-          - Strict
-          - Lax
-          - None
-        session:
-          type: boolean
-        expires:
-          type: number
-        expirationDate:
-          type: number
-        expiry:
-          type: number
-    CloudStartRequest:
-      type: object
-      description: API-key callers must provide proxy; session callers must provide apiKeyId. These requirements depend on authentication.
-      properties:
-        proxy:
-          $ref: '#/components/schemas/Proxy'
-        apiKeyId:
-          type: string
-          format: uuid
-        countryCode:
-          type: string
-          description: Session authentication only; cannot be combined with proxy.
-        cookies:
-          type: array
-          items:
-            $ref: '#/components/schemas/Cookie'
-        fingerprint:
-          $ref: '#/components/schemas/Fingerprint'
-    CloudLifecycleResult:
-      type: object
-      properties:
-        ok:
-          type: boolean
-        id:
-          type: string
-          format: uuid
-        source:
-          type: string
-          enum:
-          - manual
-          - launch
-        deleteOnStop:
-          type: boolean
-        deleted:
-          type: boolean
-        runtime:
-          $ref: '#/components/schemas/CloudRuntime'
-        traceId:
-          type: string
-    CloudLaunchRequest:
-      type: object
-      required:
-      - proxy
-      additionalProperties: false
-      properties:
-        proxy:
-          $ref: '#/components/schemas/Proxy'
-        apiKeyId:
-          type: string
-          format: uuid
-          description: Required with session authentication. With API-key authentication, any supplied ID must match that key.
-        tabs:
-          type: array
-          maxItems: 8
-          description: HTTP(S) URLs; at most one tab may be active. When none is active, the first is selected.
-          items:
-            oneOf:
-            - type: string
-              format: uri
-            - type: object
-              required:
-              - url
-              properties:
-                url:
-                  type: string
-                  format: uri
-                active:
-                  type: boolean
-                  default: false
-        cookies:
-          type: array
-          maxItems: 10000
-          items:
-            $ref: '#/components/schemas/Cookie'
-        fingerprint:
-          $ref: '#/components/schemas/Fingerprint'
     CloudRuntime:
       type: object
       required:
@@ -405,84 +280,6 @@ components:
           type: number
         longitude:
           type: number
-    CloudBrowser:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        source:
-          type: string
-          enum:
-          - manual
-          - launch
-        deleteOnStop:
-          type: boolean
-          description: Current profiles are retained on stop; false.
-        deleted:
-          type: boolean
-        remark:
-          type: string
-        browserSettings:
-          type: object
-          description: Saved browser settings with proxy credentials removed; may include owner-readable cookies and snapshots.
-          additionalProperties: true
-        proxyDisplayIp:
-          type:
-          - string
-          - 'null'
-        proxyDisplayRegion:
-          type:
-          - string
-          - 'null'
-        lastOpenedAt:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-        runtime:
-          $ref: '#/components/schemas/CloudRuntime'
-    BrowserSettings:
-      type: object
-      description: Reusable browser options. proxy and countryCode cannot be supplied together. Browser tasks and temporary CDP sessions use a managed proxy when selection is omitted. Cloud browser API-key starts have stricter top-level custom proxy requirements described on their operations.
-      properties:
-        viewport:
-          $ref: '#/components/schemas/Viewport'
-        locale:
-          type: string
-          example: en-US
-        timezoneId:
-          type: string
-          example: Asia/Shanghai
-        geolocation:
-          $ref: '#/components/schemas/Geolocation'
-        proxy:
-          $ref: '#/components/schemas/Proxy'
-        countryCode:
-          type: string
-          description: GLOBAL or a two-letter region code; cannot be combined with proxy.
-          example: US
-        userAgent:
-          type: string
-        userAgentMode:
-          type: string
-          enum:
-          - custom
-          - random
-        userAgentOs:
-          type: string
-          enum:
-          - windows
-          - macos
-        fingerprint:
-          $ref: '#/components/schemas/Fingerprint'
-        cookies:
-          type: array
-          items:
-            $ref: '#/components/schemas/Cookie'
     Fingerprint:
       type: object
       description: Browser fingerprint modes. Defaults and supported combinations depend on the workflow; the server maintains a coherent identity and seed.
@@ -553,6 +350,200 @@ components:
           type: integer
           minimum: 1
           maximum: 64
+    BrowserSettings:
+      type: object
+      description: Reusable browser options. proxy and countryCode cannot be supplied together. Browser tasks and temporary CDP sessions use a managed proxy when selection is omitted. Cloud browser API-key starts have stricter top-level custom proxy requirements described on their operations.
+      properties:
+        viewport:
+          $ref: '#/components/schemas/Viewport'
+        locale:
+          type: string
+          example: en-US
+        timezoneId:
+          type: string
+          example: Asia/Shanghai
+        geolocation:
+          $ref: '#/components/schemas/Geolocation'
+        proxy:
+          $ref: '#/components/schemas/Proxy'
+        countryCode:
+          type: string
+          description: GLOBAL or a two-letter region code; cannot be combined with proxy.
+          example: US
+        userAgent:
+          type: string
+        userAgentMode:
+          type: string
+          enum:
+          - custom
+          - random
+        userAgentOs:
+          type: string
+          enum:
+          - windows
+          - macos
+        fingerprint:
+          $ref: '#/components/schemas/Fingerprint'
+        cookies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Cookie'
+    CloudStartRequest:
+      type: object
+      description: API-key callers must provide proxy; session callers must provide apiKeyId. These requirements depend on authentication.
+      properties:
+        proxy:
+          $ref: '#/components/schemas/Proxy'
+        apiKeyId:
+          type: string
+          format: uuid
+        countryCode:
+          type: string
+          description: Session authentication only; cannot be combined with proxy.
+        cookies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Cookie'
+        fingerprint:
+          $ref: '#/components/schemas/Fingerprint'
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        code:
+          type: string
+        traceId:
+          type: string
+        retryable:
+          type: boolean
+      additionalProperties: true
+    CloudLaunchRequest:
+      type: object
+      required:
+      - proxy
+      additionalProperties: false
+      properties:
+        proxy:
+          $ref: '#/components/schemas/Proxy'
+        apiKeyId:
+          type: string
+          format: uuid
+          description: Required with session authentication. With API-key authentication, any supplied ID must match that key.
+        tabs:
+          type: array
+          maxItems: 8
+          description: HTTP(S) URLs; at most one tab may be active. When none is active, the first is selected.
+          items:
+            oneOf:
+            - type: string
+              format: uri
+            - type: object
+              required:
+              - url
+              properties:
+                url:
+                  type: string
+                  format: uri
+                active:
+                  type: boolean
+                  default: false
+        cookies:
+          type: array
+          maxItems: 10000
+          items:
+            $ref: '#/components/schemas/Cookie'
+        fingerprint:
+          $ref: '#/components/schemas/Fingerprint'
+    CloudBrowser:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        source:
+          type: string
+          enum:
+          - manual
+          - launch
+        deleteOnStop:
+          type: boolean
+          description: Current profiles are retained on stop; false.
+        deleted:
+          type: boolean
+        remark:
+          type: string
+        browserSettings:
+          type: object
+          description: Saved browser settings with proxy credentials removed; may include owner-readable cookies and snapshots.
+          additionalProperties: true
+        proxyDisplayIp:
+          type:
+          - string
+          - 'null'
+        proxyDisplayRegion:
+          type:
+          - string
+          - 'null'
+        lastOpenedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        runtime:
+          $ref: '#/components/schemas/CloudRuntime'
+    Cookie:
+      type: object
+      required:
+      - name
+      - domain
+      description: Preset browser cookie. Use native JSON booleans. Legacy browser-task inputs also accept compatibility forms for some flags. Launch defaults an omitted value to an empty string. Expiry aliases are Unix seconds.
+      properties:
+        name:
+          type: string
+          minLength: 1
+        value:
+          type: string
+          default: ''
+        domain:
+          type: string
+          minLength: 1
+        path:
+          type: string
+          default: /
+        secure:
+          type: boolean
+        httpOnly:
+          type: boolean
+        hostOnly:
+          type: boolean
+        sameSite:
+          type: string
+          enum:
+          - Strict
+          - Lax
+          - None
+        session:
+          type: boolean
+        expires:
+          type: number
+        expirationDate:
+          type: number
+        expiry:
+          type: number
+    Viewport:
+      type: object
+      required:
+      - width
+      - height
+      properties:
+        width:
+          type: number
+        height:
+          type: number
     Proxy:
       type: object
       description: Use server OR protocol/host/port. server must be an http:// or socks5:// URL with an explicit port, without embedded credentials, query, fragment, or non-root path. Port range is 1-65535. Provide both non-empty username and password, or omit both. Custom proxy and countryCode are mutually exclusive. Proxy failures never fall back to a direct connection.
@@ -595,18 +586,27 @@ components:
         not:
           required:
           - server
-    Error:
+    CloudLifecycleResult:
       type: object
       properties:
-        error:
+        ok:
+          type: boolean
+        id:
           type: string
-        code:
+          format: uuid
+        source:
           type: string
+          enum:
+          - manual
+          - launch
+        deleteOnStop:
+          type: boolean
+        deleted:
+          type: boolean
+        runtime:
+          $ref: '#/components/schemas/CloudRuntime'
         traceId:
           type: string
-        retryable:
-          type: boolean
-      additionalProperties: true
   parameters:
     CloudBrowserId:
       name: id

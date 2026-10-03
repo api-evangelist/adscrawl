@@ -175,56 +175,15 @@ paths:
         default:
           $ref: '#/components/responses/ApiError'
 components:
+  parameters:
+    SessionId:
+      name: sessionId
+      in: path
+      required: true
+      description: Temporary CDP session ID returned by create or list.
+      schema:
+        type: string
   schemas:
-    Viewport:
-      type: object
-      required:
-      - width
-      - height
-      properties:
-        width:
-          type: number
-        height:
-          type: number
-    Cookie:
-      type: object
-      required:
-      - name
-      - domain
-      description: Preset browser cookie. Use native JSON booleans. Legacy browser-task inputs also accept compatibility forms for some flags. Launch defaults an omitted value to an empty string. Expiry aliases are Unix seconds.
-      properties:
-        name:
-          type: string
-          minLength: 1
-        value:
-          type: string
-          default: ''
-        domain:
-          type: string
-          minLength: 1
-        path:
-          type: string
-          default: /
-        secure:
-          type: boolean
-        httpOnly:
-          type: boolean
-        hostOnly:
-          type: boolean
-        sameSite:
-          type: string
-          enum:
-          - Strict
-          - Lax
-          - None
-        session:
-          type: boolean
-        expires:
-          type: number
-        expirationDate:
-          type: number
-        expiry:
-          type: number
     CdpSession:
       type: object
       required:
@@ -252,44 +211,6 @@ components:
           type: number
         longitude:
           type: number
-    BrowserSettings:
-      type: object
-      description: Reusable browser options. proxy and countryCode cannot be supplied together. Browser tasks and temporary CDP sessions use a managed proxy when selection is omitted. Cloud browser API-key starts have stricter top-level custom proxy requirements described on their operations.
-      properties:
-        viewport:
-          $ref: '#/components/schemas/Viewport'
-        locale:
-          type: string
-          example: en-US
-        timezoneId:
-          type: string
-          example: Asia/Shanghai
-        geolocation:
-          $ref: '#/components/schemas/Geolocation'
-        proxy:
-          $ref: '#/components/schemas/Proxy'
-        countryCode:
-          type: string
-          description: GLOBAL or a two-letter region code; cannot be combined with proxy.
-          example: US
-        userAgent:
-          type: string
-        userAgentMode:
-          type: string
-          enum:
-          - custom
-          - random
-        userAgentOs:
-          type: string
-          enum:
-          - windows
-          - macos
-        fingerprint:
-          $ref: '#/components/schemas/Fingerprint'
-        cookies:
-          type: array
-          items:
-            $ref: '#/components/schemas/Cookie'
     Fingerprint:
       type: object
       description: Browser fingerprint modes. Defaults and supported combinations depend on the workflow; the server maintains a coherent identity and seed.
@@ -360,6 +281,66 @@ components:
           type: integer
           minimum: 1
           maximum: 64
+    BrowserSettings:
+      type: object
+      description: Reusable browser options. proxy and countryCode cannot be supplied together. Browser tasks and temporary CDP sessions use a managed proxy when selection is omitted. Cloud browser API-key starts have stricter top-level custom proxy requirements described on their operations.
+      properties:
+        viewport:
+          $ref: '#/components/schemas/Viewport'
+        locale:
+          type: string
+          example: en-US
+        timezoneId:
+          type: string
+          example: Asia/Shanghai
+        geolocation:
+          $ref: '#/components/schemas/Geolocation'
+        proxy:
+          $ref: '#/components/schemas/Proxy'
+        countryCode:
+          type: string
+          description: GLOBAL or a two-letter region code; cannot be combined with proxy.
+          example: US
+        userAgent:
+          type: string
+        userAgentMode:
+          type: string
+          enum:
+          - custom
+          - random
+        userAgentOs:
+          type: string
+          enum:
+          - windows
+          - macos
+        fingerprint:
+          $ref: '#/components/schemas/Fingerprint'
+        cookies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Cookie'
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        code:
+          type: string
+        traceId:
+          type: string
+        retryable:
+          type: boolean
+      additionalProperties: true
+    Viewport:
+      type: object
+      required:
+      - width
+      - height
+      properties:
+        width:
+          type: number
+        height:
+          type: number
     Proxy:
       type: object
       description: Use server OR protocol/host/port. server must be an http:// or socks5:// URL with an explicit port, without embedded credentials, query, fragment, or non-root path. Port range is 1-65535. Provide both non-empty username and password, or omit both. Custom proxy and countryCode are mutually exclusive. Proxy failures never fall back to a direct connection.
@@ -402,26 +383,45 @@ components:
         not:
           required:
           - server
-    Error:
+    Cookie:
       type: object
+      required:
+      - name
+      - domain
+      description: Preset browser cookie. Use native JSON booleans. Legacy browser-task inputs also accept compatibility forms for some flags. Launch defaults an omitted value to an empty string. Expiry aliases are Unix seconds.
       properties:
-        error:
+        name:
           type: string
-        code:
+          minLength: 1
+        value:
           type: string
-        traceId:
+          default: ''
+        domain:
           type: string
-        retryable:
+          minLength: 1
+        path:
+          type: string
+          default: /
+        secure:
           type: boolean
-      additionalProperties: true
-  parameters:
-    SessionId:
-      name: sessionId
-      in: path
-      required: true
-      description: Temporary CDP session ID returned by create or list.
-      schema:
-        type: string
+        httpOnly:
+          type: boolean
+        hostOnly:
+          type: boolean
+        sameSite:
+          type: string
+          enum:
+          - Strict
+          - Lax
+          - None
+        session:
+          type: boolean
+        expires:
+          type: number
+        expirationDate:
+          type: number
+        expiry:
+          type: number
   responses:
     ApiError:
       description: Error response. Typical statuses are 400 invalid input, 401 invalid authentication, 402 payment/credits required, 403 ownership mismatch, 404 missing resource, 409 state or quota conflict, 410 expired session, 429 rate/concurrency limit, 500 internal failure, 502 upstream failure, 503 capacity/runtime unavailable, or 504 timeout. Not every status applies to every operation. Use HTTP status and code when present.
