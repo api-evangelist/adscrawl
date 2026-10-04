@@ -148,279 +148,6 @@ components:
           type: number
         longitude:
           type: number
-    ExtractionField:
-      type: object
-      required:
-      - source
-      properties:
-        source:
-          type: string
-          enum:
-          - dom
-          - network
-        selector:
-          type: string
-        value:
-          type: string
-          enum:
-          - text
-          - html
-          - attribute
-          default: text
-        attribute:
-          type: string
-        urlIncludes:
-          type: string
-        path:
-          type: string
-          description: JSON path for a matching network response.
-        multiple:
-          type: boolean
-        parse:
-          type: string
-          enum:
-          - string
-          - number
-          - integer
-          - boolean
-          - json
-        regex:
-          type: string
-        required:
-          type: boolean
-    ScreenshotRequest:
-      allOf:
-      - $ref: '#/components/schemas/TaskOptions'
-      - type: object
-        required:
-        - url
-        properties:
-          fullPage:
-            type: boolean
-            default: true
-          selector:
-            type: string
-            description: Capture the first matching element; takes precedence over fullPage.
-    BrowserSettings:
-      type: object
-      description: Reusable browser options. proxy and countryCode cannot be supplied together. Browser tasks and temporary CDP sessions use a managed proxy when selection is omitted. Cloud browser API-key starts have stricter top-level custom proxy requirements described on their operations.
-      properties:
-        viewport:
-          $ref: '#/components/schemas/Viewport'
-        locale:
-          type: string
-          example: en-US
-        timezoneId:
-          type: string
-          example: Asia/Shanghai
-        geolocation:
-          $ref: '#/components/schemas/Geolocation'
-        proxy:
-          $ref: '#/components/schemas/Proxy'
-        countryCode:
-          type: string
-          description: GLOBAL or a two-letter region code; cannot be combined with proxy.
-          example: US
-        userAgent:
-          type: string
-        userAgentMode:
-          type: string
-          enum:
-          - custom
-          - random
-        userAgentOs:
-          type: string
-          enum:
-          - windows
-          - macos
-        fingerprint:
-          $ref: '#/components/schemas/Fingerprint'
-        cookies:
-          type: array
-          items:
-            $ref: '#/components/schemas/Cookie'
-    Fingerprint:
-      type: object
-      description: Browser fingerprint modes. Defaults and supported combinations depend on the workflow; the server maintains a coherent identity and seed.
-      properties:
-        webRtc:
-          type: string
-          enum:
-          - forward
-          - real
-          - disabled
-        webGl:
-          type: string
-          enum:
-          - random
-          - real
-        webGpu:
-          type: string
-          enum:
-          - random
-          - real
-          - disabled
-        webGlImage:
-          type: string
-          enum:
-          - random
-          - real
-        canvas:
-          type: string
-          enum:
-          - random
-          - real
-        audioContext:
-          type: string
-          enum:
-          - random
-          - real
-        clientRects:
-          type: string
-          enum:
-          - random
-          - real
-        speechVoices:
-          type: string
-          enum:
-          - random
-          - real
-        fonts:
-          type: string
-          enum:
-          - random
-          - real
-        hardware:
-          type: string
-          enum:
-          - random
-          - real
-        doNotTrack:
-          type: string
-          enum:
-          - random
-          - enabled
-          - disabled
-        hardwareConcurrency:
-          type: integer
-          minimum: 1
-          maximum: 64
-        deviceMemory:
-          type: integer
-          minimum: 1
-          maximum: 64
-    HtmlRequest:
-      allOf:
-      - $ref: '#/components/schemas/TaskOptions'
-      - type: object
-        required:
-        - url
-        properties:
-          contentMode:
-            type: string
-            enum:
-            - html
-            - markdown
-            - json
-            default: html
-          selector:
-            type: string
-            description: Optional CSS selector for targeted content.
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-        code:
-          type: string
-        traceId:
-          type: string
-        retryable:
-          type: boolean
-      additionalProperties: true
-    ExtractionTemplate:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        description:
-          type: string
-        urlPattern:
-          type: string
-        exampleUrl:
-          type: string
-        version:
-          type: integer
-        updatedAt:
-          type: string
-          format: date-time
-        outputFields:
-          type: array
-          items:
-            type: string
-        waitUntil:
-          type: string
-        input:
-          type: object
-          additionalProperties: true
-        catalog:
-          type: object
-          additionalProperties: true
-      additionalProperties: true
-    WaitFor:
-      type: object
-      properties:
-        selector:
-          type: string
-        text:
-          type: string
-        timeoutMs:
-          type: number
-          default: 15000
-    SpaRequest:
-      allOf:
-      - $ref: '#/components/schemas/TaskOptions'
-      - type: object
-        properties:
-          keyword:
-            type: string
-            description: For google-trends-explore, 1-5 unique comma-separated keywords, each at most 100 Unicode characters.
-          mode:
-            type: string
-            enum:
-            - inspect
-            - extract
-          template:
-            type: string
-          parameters:
-            type: object
-            additionalProperties: true
-          waitFor:
-            $ref: '#/components/schemas/WaitFor'
-          actions:
-            type: array
-            items:
-              $ref: '#/components/schemas/Action'
-          fields:
-            type: object
-            additionalProperties:
-              $ref: '#/components/schemas/ExtractionField'
-          schema:
-            type: object
-            description: Legacy field mapping (string selectors or field objects), optionally wrapped in properties. Used only if fields is absent.
-            additionalProperties: true
-    Viewport:
-      type: object
-      required:
-      - width
-      - height
-      properties:
-        width:
-          type: number
-        height:
-          type: number
     Proxy:
       type: object
       description: Use server OR protocol/host/port. server must be an http:// or socks5:// URL with an explicit port, without embedded credentials, query, fragment, or non-root path. Port range is 1-65535. Provide both non-empty username and password, or omit both. Custom proxy and countryCode are mutually exclusive. Proxy failures never fall back to a direct connection.
@@ -463,6 +190,84 @@ components:
         not:
           required:
           - server
+    ExtractionField:
+      type: object
+      required:
+      - source
+      properties:
+        source:
+          type: string
+          enum:
+          - dom
+          - network
+        selector:
+          type: string
+        value:
+          type: string
+          enum:
+          - text
+          - html
+          - attribute
+          default: text
+        attribute:
+          type: string
+        urlIncludes:
+          type: string
+        path:
+          type: string
+          description: JSON path for a matching network response.
+        multiple:
+          type: boolean
+        parse:
+          type: string
+          enum:
+          - string
+          - number
+          - integer
+          - boolean
+          - json
+        regex:
+          type: string
+        required:
+          type: boolean
+    BrowserSettings:
+      type: object
+      description: Reusable browser options. proxy and countryCode cannot be supplied together. Browser tasks and temporary CDP sessions use a managed proxy when selection is omitted. Cloud browser API-key starts have stricter top-level custom proxy requirements described on their operations.
+      properties:
+        viewport:
+          $ref: '#/components/schemas/Viewport'
+        locale:
+          type: string
+          example: en-US
+        timezoneId:
+          type: string
+          example: Asia/Shanghai
+        geolocation:
+          $ref: '#/components/schemas/Geolocation'
+        proxy:
+          $ref: '#/components/schemas/Proxy'
+        countryCode:
+          type: string
+          description: GLOBAL or a two-letter region code; cannot be combined with proxy.
+          example: US
+        userAgent:
+          type: string
+        userAgentMode:
+          type: string
+          enum:
+          - custom
+          - random
+        userAgentOs:
+          type: string
+          enum:
+          - windows
+          - macos
+        fingerprint:
+          $ref: '#/components/schemas/Fingerprint'
+        cookies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Cookie'
     TaskOptions:
       allOf:
       - $ref: '#/components/schemas/BrowserSettings'
@@ -560,6 +365,201 @@ components:
             type: number
           y:
             type: number
+    ExtractionTemplate:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        urlPattern:
+          type: string
+        exampleUrl:
+          type: string
+        version:
+          type: integer
+        updatedAt:
+          type: string
+          format: date-time
+        outputFields:
+          type: array
+          items:
+            type: string
+        waitUntil:
+          type: string
+        input:
+          type: object
+          additionalProperties: true
+        catalog:
+          type: object
+          additionalProperties: true
+      additionalProperties: true
+    ScreenshotRequest:
+      allOf:
+      - $ref: '#/components/schemas/TaskOptions'
+      - type: object
+        required:
+        - url
+        properties:
+          fullPage:
+            type: boolean
+            default: true
+          selector:
+            type: string
+            description: Capture the first matching element; takes precedence over fullPage.
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        code:
+          type: string
+        traceId:
+          type: string
+        retryable:
+          type: boolean
+      additionalProperties: true
+    HtmlRequest:
+      allOf:
+      - $ref: '#/components/schemas/TaskOptions'
+      - type: object
+        required:
+        - url
+        properties:
+          contentMode:
+            type: string
+            enum:
+            - html
+            - markdown
+            - json
+            default: html
+          selector:
+            type: string
+            description: Optional CSS selector for targeted content.
+    Fingerprint:
+      type: object
+      description: Browser fingerprint modes. Defaults and supported combinations depend on the workflow; the server maintains a coherent identity and seed.
+      properties:
+        webRtc:
+          type: string
+          enum:
+          - forward
+          - real
+          - disabled
+        webGl:
+          type: string
+          enum:
+          - random
+          - real
+        webGpu:
+          type: string
+          enum:
+          - random
+          - real
+          - disabled
+        webGlImage:
+          type: string
+          enum:
+          - random
+          - real
+        canvas:
+          type: string
+          enum:
+          - random
+          - real
+        audioContext:
+          type: string
+          enum:
+          - random
+          - real
+        clientRects:
+          type: string
+          enum:
+          - random
+          - real
+        speechVoices:
+          type: string
+          enum:
+          - random
+          - real
+        fonts:
+          type: string
+          enum:
+          - random
+          - real
+        hardware:
+          type: string
+          enum:
+          - random
+          - real
+        doNotTrack:
+          type: string
+          enum:
+          - random
+          - enabled
+          - disabled
+        hardwareConcurrency:
+          type: integer
+          minimum: 1
+          maximum: 64
+        deviceMemory:
+          type: integer
+          minimum: 1
+          maximum: 64
+    SpaRequest:
+      allOf:
+      - $ref: '#/components/schemas/TaskOptions'
+      - type: object
+        properties:
+          keyword:
+            type: string
+            description: For google-trends-explore, 1-5 unique comma-separated keywords, each at most 100 Unicode characters.
+          mode:
+            type: string
+            enum:
+            - inspect
+            - extract
+          template:
+            type: string
+          parameters:
+            type: object
+            additionalProperties: true
+          waitFor:
+            $ref: '#/components/schemas/WaitFor'
+          actions:
+            type: array
+            items:
+              $ref: '#/components/schemas/Action'
+          fields:
+            type: object
+            additionalProperties:
+              $ref: '#/components/schemas/ExtractionField'
+          schema:
+            type: object
+            description: Legacy field mapping (string selectors or field objects), optionally wrapped in properties. Used only if fields is absent.
+            additionalProperties: true
+    Viewport:
+      type: object
+      required:
+      - width
+      - height
+      properties:
+        width:
+          type: number
+        height:
+          type: number
+    WaitFor:
+      type: object
+      properties:
+        selector:
+          type: string
+        text:
+          type: string
+        timeoutMs:
+          type: number
+          default: 15000
     Cookie:
       type: object
       required:
@@ -600,12 +600,6 @@ components:
         expiry:
           type: number
   responses:
-    TaskError:
-      description: 'Browser-task failure. 400 invalid URL/options; 401 invalid API key; 402 INSUFFICIENT_CREDITS; 404 unavailable Chrome Web Store listing; 422 missing content/fields or invalid extraction configuration; 429 rate limit; 500 unclassified failure; 502 proxy/target failure; 503 queue/worker unavailable; 504 task/navigation/proxy timeout. A target HTTP 403 may be wrapped as a service HTTP 502: inspect code and upstreamStatus when supplied rather than assuming a proxy failure.'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     ApiError:
       description: Error response. Typical statuses are 400 invalid input, 401 invalid authentication, 402 payment/credits required, 403 ownership mismatch, 404 missing resource, 409 state or quota conflict, 410 expired session, 429 rate/concurrency limit, 500 internal failure, 502 upstream failure, 503 capacity/runtime unavailable, or 504 timeout. Not every status applies to every operation. Use HTTP status and code when present.
       headers:
@@ -613,6 +607,12 @@ components:
           description: Request correlation identifier.
           schema:
             type: string
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TaskError:
+      description: 'Browser-task failure. 400 invalid URL/options; 401 invalid API key; 402 INSUFFICIENT_CREDITS; 404 unavailable Chrome Web Store listing; 422 missing content/fields or invalid extraction configuration; 429 rate limit; 500 unclassified failure; 502 proxy/target failure; 503 queue/worker unavailable; 504 task/navigation/proxy timeout. A target HTTP 403 may be wrapped as a service HTTP 502: inspect code and upstreamStatus when supplied rather than assuming a proxy failure.'
       content:
         application/json:
           schema:
