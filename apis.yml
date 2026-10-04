@@ -12,13 +12,23 @@ x-tier-reason: enrichment pass 2026-10-02 (modular-v1; was harvest)
 specificationVersion: '0.20'
 created: '2026-10-02'
 modified: '2026-10-02'
+x-docs-platform: mintlify
+x-docs-platform-confidence: medium
+x-docs-platform-checked: 2026-10-03
 tags:
+- Company
+- Browser Automation
+- WebDataExtraction
+- Playwright
+- Puppeteer
+- Chrome DevTools Protocol
+tags_raw:
 - Company
 - BrowserAutomation
 - WebDataExtraction
 - Playwright
 - Puppeteer
-- CDP
+- Chrome DevTools Protocol
 image: https://www.adscrawl.net/logo.svg
 maintainers:
 - FN: Kin Lane
@@ -115,6 +125,8 @@ apis:
   humanURL: https://docs.adscrawl.net/api-reference/introduction
   baseURL: https://api.adscrawl.net
   tags:
+  - Cloud Browsers
+  tags_raw:
   - Cloud browsers
   properties:
   - type: OpenAPI
@@ -162,3 +174,5 @@ x-enrichment:
   artifacts_added: 30
   pass: modular-v1
   engine: identity=local,contract=local,surfaces=local,docs=local,regulatory=local
+x-tags-removed:
+- CDP
