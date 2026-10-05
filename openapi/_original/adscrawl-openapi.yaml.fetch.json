@@ -1,0 +1,12 @@
+{
+ "url": "https://www.adscrawl.net/openapi.yaml",
+ "requested_url": "https://www.adscrawl.net/openapi.yaml",
+ "status": 200,
+ "content_type": "application/octet-stream",
+ "bytes": 34895,
+ "sha256": "aa45d06519217576d18eda7ffd0fc0cd7021b396eee1c8f770407c195a76d038",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "equivalent",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the provider's current document describes the same operations (Jaccard 1.0), but the bytes differ, so the archive is an earlier or reformatted copy."
+}
