@@ -665,3 +665,9 @@ components:
 externalDocs:
   description: AdsCrawl documentation and WebSocket examples
   url: https://www.adscrawl.net/docs/
+x-provenance:
+  method: harvested
+  publisher: AdsCrawl
+  source: https://www.adscrawl.net/openapi.yaml
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
