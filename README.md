@@ -64,7 +64,7 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-AdsCrawl provides a Browser Automation API that lets developers run full browsers (Playwright, Puppeteer, or Chrome DevTools Protocol) with residential proxy routing to handle dynamic pages, authenticated sessions, and structured web data extraction. The platform offers endpoints for page rendering, screenshot capture, HTML extraction, and data scraping, targeting use cases like e‑commerce monitoring, SEO analysis, and content aggregation. It emphasizes real‑browser fidelity and scalable proxy infrastructure for reliable web data collection.
+AdsCrawl offers a comprehensive Browser Automation API enabling developers to run full browsers such as Playwright, Puppeteer, or Chrome DevTools Protocol with residential proxy routing. It supports dynamic page rendering, screenshot capture, HTML extraction, and structured data scraping, catering to e‑commerce monitoring, SEO analysis, content aggregation, and other web‑data use cases. The service emphasizes real‑browser fidelity, scalable proxy infrastructure, and reliable data collection across authenticated sessions and complex sites.
 
 **Areas:** Company · Browser Automation · WebDataExtraction · Playwright · Puppeteer · Chrome DevTools Protocol
 
@@ -133,6 +133,7 @@ Links to the company's own pages. This repository publishes no copy of their spe
 - [Getting started](https://docs.adscrawl.net/quickstart)
 - [API reference](https://docs.adscrawl.net/api-reference/introduction)
 - [Pricing](https://docs.adscrawl.net/pricing)
+- [Support](https://www.adscrawl.net/support/)
 - [Blog](https://blog.adscrawl.net/)
 - [Terms of service](https://www.adscrawl.net/terms-of-service)
 - [Privacy policy](https://www.adscrawl.net/privacy-policy)
