@@ -66,7 +66,7 @@
 
 AdsCrawl offers a comprehensive Browser Automation API enabling developers to run full browsers such as Playwright, Puppeteer, or Chrome DevTools Protocol with residential proxy routing. It supports dynamic page rendering, screenshot capture, HTML extraction, and structured data scraping, catering to e‑commerce monitoring, SEO analysis, content aggregation, and other web‑data use cases. The service emphasizes real‑browser fidelity, scalable proxy infrastructure, and reliable data collection across authenticated sessions and complex sites.
 
-**Areas:** Company · Browser Automation · WebDataExtraction · Playwright · Puppeteer · Chrome DevTools Protocol
+**Areas:** Company · Browser Automation · Web Data Extraction · Playwright · Puppeteer · Chrome DevTools Protocol
 
 ## AdsCrawl on APIs.io
 
@@ -86,7 +86,7 @@ Each property below is a page on APIs.io carrying the machine-readable artifact 
 
 Which operations an agent can call, which act, and which need a human in the loop.
 
-- [Adscrawl Agentic Access](https://apis.io/agentic-access/adscrawl/adscrawl-agentic-access/)
+- [AdsCrawl Agentic Access](https://apis.io/agentic-access/adscrawl/adscrawl-agentic-access/)
 
 #### JSON Schema (6)
 
@@ -115,14 +115,21 @@ Spectral rulesets for the provider's contracts.
 
 Authentication, trust centre, and vulnerability disclosure.
 
-- [Adscrawl Authentication](https://apis.io/security/adscrawl/adscrawl-authentication/)
-- [Adscrawl Domain Security](https://apis.io/security/adscrawl/adscrawl-domain-security/)
+- [AdsCrawl Authentication](https://apis.io/security/adscrawl/adscrawl-authentication/)
+- [AdsCrawl Domain Security](https://apis.io/security/adscrawl/adscrawl-domain-security/)
 
-#### Plans and pricing (1)
+#### Plans and pricing (2)
 
 Published plans, tiers and prices.
 
-- [Adscrawl Plans Pricing](https://apis.io/plans/adscrawl/adscrawl-plans-pricing/)
+- [AdsCrawl Plans Pricing](https://apis.io/plans/adscrawl/adscrawl-plans-pricing/)
+- [AdsCrawl Price Estimates](https://apis.io/plans/adscrawl/adscrawl-price-estimates/)
+
+#### FinOps (1)
+
+What the API costs to run, by operation.
+
+- [AdsCrawl Finops](https://apis.io/finops/adscrawl/adscrawl-finops/)
 
 ## Where to find this API
 
@@ -141,18 +148,18 @@ Links to the company's own pages. This repository publishes no copy of their spe
 
 ## API Evangelist rating
 
-**Kin Score 53.6** — developing · rubric 0.25.0 · scored 2026-10-23
+**Kin Score 55.9** — strong · rubric 0.28.1 · scored 2026-11-21
 
 | Facet | Score |
 |---|---|
 | Discoverability | 73.2 |
-| Contract quality | 58.9 |
+| Contract quality | 64.5 |
 | Contract governance | 22.0 |
-| Operational transparency | 5.3 |
-| Developer ergonomics | 61.3 |
-| Access clarity | 76.3 |
+| Operational transparency | 4.8 |
+| Developer ergonomics | 66.1 |
+| Access clarity | 80.9 |
 
-**Agent readiness 39.3** — agent-ready (gated down from agent-native)
+**Agent readiness 35.6** — agent-ready
 
 | Agent-readiness dimension | Result |
 |---|---|
@@ -172,13 +179,17 @@ Links to the company's own pages. This repository publishes no copy of their spe
 | Agent Card | — |
 | Dry Run Mode | — |
 | Delegated Identity | served (partial credit) |
-| Protected Resource Metadata | verified |
+| Protected Resource Metadata | — |
 | Dynamic Client Registration | yes |
 | Agentic Commerce | — |
 | Pagination Ratio | partial |
 | Operation Distinctiveness | distinct |
+| MCP Tool Quality | na |
+| Onboarding Descriptor | — |
+| Dns Aid Index | na |
+| Markdown Negotiation | yes |
 
-**Regulatory alignment 24.5** — Horizontal (data, software, accessibility, platform)
+**Regulatory alignment 18.6** — Horizontal (data, software, accessibility, platform)
 
 The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/adscrawl/](https://apis.io/providers/adscrawl/).
 
